@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import { Button, message } from "antd";
+import Admin from "./pages/admin";
+import Login from "./pages/login";
+import { Switch, BrowserRouter, Route } from "react-router-dom";
+export default class App extends Component {
+  info = () => {
+    message.error("This is a normal message");
+  };
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login" component={Login}></Route>
+          <Route path="/" component={Admin}></Route>
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
-
-export default App;
