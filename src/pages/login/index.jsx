@@ -1,26 +1,41 @@
 import React, { Component } from "react";
 import "./login.less";
-import {login} from "../../api/action"
-import { Form, Input, Button, Checkbox } from "antd";
+import { login } from "../../api/action";
+import { Form, Input, Button, Checkbox, message } from "antd";
+import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
+import { Redirect } from "react-router";
 /* 
 router component for login page
 */
 export default class Login extends Component {
-    onFinish = (values) => {
-        console.log('Success:', values);
-        console.log(values.username, values.password,values.remember)
-        login(values.username, values.password).then(response=>{
-            if(response.data.status===0) alert("success")
-            else alert("failed")
-            console.log(response.data)},error=>{alert("server failed")})
-        // login("zhad2wbwnn","12e121223").then(response=>console.log(response.data))
-      };
-    
-    onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-      };
+  onFinish = async (values) => {
+    console.log("Success:", values);
+    console.log(values.username, values.password, values.remember);
+    const data = await login(values.username, values.password);
+    console.log("sdasd", data, typeof data.data);
+    if (data.status === 0) {
+      memoryUtils.user = data.data;
+      storageUtils.saveUser(data.data);
+      // memoryUtils.user
+      this.props.history.replace("/");
+      message.success("success");
+    } else {
+      message.error("Wrong password or wrong username");
+    }
+  };
+  // login("zhad2wbwnn","12e121223").then(response=>console.log(response.data))
+
+  onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
   render() {
+    const user = memoryUtils.user;
+    if (user && user.id) {
+      console.log("has logged");
+      return <Redirect to="/" />;
+    }
     return (
       <div className="login">
         <header className="login-header">
@@ -51,21 +66,21 @@ export default class Login extends Component {
                   message: "Please input your username!",
                 },
                 {
-                    min: 4,
-                    message: "Your username must be longer than 4!",
-                  },
-                  {
-                    max: 12,
-                    message: "Your username must be shorter than 12!",
-                  },
-                  {
-                    max: 12,
-                    message: "Your username must be shorter than 12!",
-                  },
-                  {
-                      pattern: /^\w+$/,
-                      message: "Please only input word, number and _",
-                  }
+                  min: 4,
+                  message: "Your username must be longer than 4!",
+                },
+                {
+                  max: 12,
+                  message: "Your username must be shorter than 12!",
+                },
+                {
+                  max: 12,
+                  message: "Your username must be shorter than 12!",
+                },
+                {
+                  pattern: /^\w+$/,
+                  message: "Please only input word, number and _",
+                },
               ]}
             >
               <Input />
@@ -80,21 +95,21 @@ export default class Login extends Component {
                   message: "Please input your password!",
                 },
                 {
-                    min: 4,
-                    message: "Your password must be longer than 4!",
-                  },
-                  {
-                    max: 12,
-                    message: "Your password must be shorter than 12!",
-                  },
-                  {
-                    max: 12,
-                    message: "Your password must be shorter than 12!",
-                  },
-                  {
-                      pattern: /^(\d|\w|_)+$/,
-                      message: "Please only input word, number and _",
-                  }
+                  min: 4,
+                  message: "Your password must be longer than 4!",
+                },
+                {
+                  max: 12,
+                  message: "Your password must be shorter than 12!",
+                },
+                {
+                  max: 12,
+                  message: "Your password must be shorter than 12!",
+                },
+                {
+                  pattern: /^(\d|\w|_)+$/,
+                  message: "Please only input word, number and _",
+                },
               ]}
             >
               <Input.Password />
@@ -117,7 +132,11 @@ export default class Login extends Component {
                 span: 16,
               }}
             >
-              <Button type="primary" htmlType="submit" onClick={this.submitLogin}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={this.submitLogin}
+              >
                 Submit
               </Button>
             </Form.Item>
