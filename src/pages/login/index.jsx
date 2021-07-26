@@ -13,7 +13,6 @@ export default class Login extends Component {
     console.log("Success:", values);
     console.log(values.username, values.password, values.remember);
     const data = await login(values.username, values.password);
-    console.log("sdasd", data, typeof data.data);
     if (data.status === 0) {
       memoryUtils.user = data.data;
       storageUtils.saveUser(data.data);
@@ -32,7 +31,7 @@ export default class Login extends Component {
 
   render() {
     const user = memoryUtils.user;
-    if (user && user.id) {
+    if (user && user._id) {
       console.log("has logged");
       return <Redirect to="/" />;
     }

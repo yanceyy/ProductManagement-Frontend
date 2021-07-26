@@ -2,6 +2,6 @@ import React, {Component} from 'react'
 
 export default class Role extends Component{
     render(){
-        <div>Role </div>
+        return <div>Role </div>
     }
 }
