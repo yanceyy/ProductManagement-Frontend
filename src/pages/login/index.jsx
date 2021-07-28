@@ -73,10 +73,6 @@ export default class Login extends Component {
                   message: "Your username must be shorter than 12!",
                 },
                 {
-                  max: 12,
-                  message: "Your username must be shorter than 12!",
-                },
-                {
                   pattern: /^\w+$/,
                   message: "Please only input word, number and _",
                 },
