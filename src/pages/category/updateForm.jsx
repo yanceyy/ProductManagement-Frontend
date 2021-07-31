@@ -35,7 +35,21 @@ export default class UpdateForm extends Component {
                 initialValues={
                     {categoryName: categoryName}
             }>
-                <Item name="categoryName" shouldUpdat>
+                <Item name="categoryName" shouldUpdat
+                    rules={
+                        [
+                            {
+                                required: true,
+                                message: "Please input your value!"
+                            }, {
+                                min: 2,
+                                message: "must be longer than 1!"
+                            }, {
+                                max: 12,
+                                message: "Ymust be shorter than 12!"
+                            },
+                        ]
+                }>
                     <Input placeholder="Category name"></Input>
                 </Item>
             </Form>

@@ -36,8 +36,6 @@ export default class Category extends Component {
                  else 
                     this.setState({subCategoryNames: result.data})
 
-                
-
             } else {
                 message.error("Failed to get category data from server")
             }
@@ -102,25 +100,33 @@ export default class Category extends Component {
     }
 
     addCategory = async () => {
-        this.setState({showStatus: 0})
-        const parentId = this.form.getFieldsValue()['parentId']
-        const categoryName = this.form.getFieldsValue()['categoryName']
-        console.log("addCategory   ", parentId, categoryName)
-        const result = await readdCategory(parentId, categoryName)
-        if (result.status === 0) 
-            this.getCategoryNames(parentId)
-         // only update the required page
+        this.form.validateFields().then(async values => {
+            this.setState({showStatus: 0})
+            const parentId = values['parentId']
+            const categoryName = values['categoryName']
+            console.log("addCategory   ", parentId, categoryName)
+            const result = await readdCategory(parentId, categoryName)
+            if (result.status === 0) 
+                this.getCategoryNames(parentId)
+            
+        }).catch(() => {})
+        // validate the inputtings
+
+
+        // only update the required page
     }
 
-    updateCategory = async () => {
-        this.setState({showStatus: 0}) // show the dialogue
-        const cayegoryId = this.category._id
-        const categoryName = this.form.getFieldsValue()['categoryName']
-        console.log("categoryName", categoryName)
-        const result = await reupdateCategory(cayegoryId, categoryName)
-        if (result.status === 0) 
-            this.getCategoryNames()
-        
+    updateCategory = () => {
+        this.form.validateFields().then(async values => {
+            this.setState({showStatus: 0}) // hide the dialogue
+            const cayegoryId = this.category._id
+            const categoryName = values['categoryName']
+            console.log("categoryName", categoryName)
+            const result = await reupdateCategory(cayegoryId, categoryName)
+            if (result.status === 0) 
+                this.getCategoryNames()
+            
+        }).catch(() => {}) // validate the inputtings
     }
 
     render() {
@@ -210,7 +216,7 @@ export default class Category extends Component {
                     }
                     loading={loading}
                     bordered
-                    rowKey='_id'/>;
+                    rowKey='_id'/>
             </Card>
         </div>
         );
