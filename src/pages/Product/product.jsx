@@ -85,9 +85,7 @@ export default class ProductPage extends Component {
                                     }
                                     alt=""/>
                             ))
-                        }
-                            <img className="productimgs" src="https://m.media-amazon.com/images/I/61mKIEXLLpL._AC_SL1000_.jpg" alt=""/>
-                        </span>
+                        } </span>
                     </Item>
                     <Item className="product-detail">
                         <span className="left-col">Description:</span>

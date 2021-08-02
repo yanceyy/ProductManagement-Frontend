@@ -81,3 +81,21 @@ export const reupdateStatus = (productId, status) => ajax(BASEURL + "/manage/pro
     productId,
     status
 }, 'POST')
+
+
+/*
+Delete Pictures
+ */
+export const redeletePicture = (name) => ajax(BASEURL + "/manage/img/delete", {
+    name
+}, 'POST')
+
+
+/*
+Add and update products
+*/
+
+export const readdupdateProduct = (product) => ajax(BASEURL + "/manage/product/" + (
+product._id ? "update" : "add"), {
+    ...product
+}, 'POST')

@@ -18,7 +18,8 @@ class LeftNav extends Component {
           </Menu.Item>
         );
       } else {
-        const cItem = item.children.find(cItem=>cItem.key === this.props.location.pathname)
+        /* decide which tab is opened */
+        const cItem = item.children.find(cItem=> this.props.location.pathname.indexOf(cItem.key)===0)
         if(cItem){this.openKey.push(item.key)}
         return (
           <SubMenu key={item.key} icon={item.icon} title={item.title}>
@@ -34,12 +35,17 @@ class LeftNav extends Component {
   }
 
   render() {
+    let path =this.props.location.pathname;
+    if(path.indexOf('/product')===0){
+      path = '/product';
+    }
     return (
       <div className="left-nav">
         <Link to="/" className="left-nav-header">
           <h1>Admin board</h1>
         </Link>
-        <Menu selectedKeys={[this.props.location.pathname]} mode="inline" theme="dark" defaultOpenKeys={this.openKey}>
+        {/* use this.props.location.pathname to set highlight  */}
+        <Menu selectedKeys={[path]} mode="inline" theme="dark" defaultOpenKeys={this.openKey}>
           {this.menuNodes}
           {/* <Menu.Item key="1" icon={<PieChartOutlined />}>
             <Link to="/home">Main</Link>

@@ -95,13 +95,22 @@ export default class ProductHome extends Component {
                     const newStatus = status ? 0 : 1;
                     return <span>
                         <Button type="primary"
+                            style={
+                                {
+                                    width: "100px",
+                                    margin: "0 auto 5px"
+                                }
+                            }
                             onClick={
                                 () => this.updateStatus(_id, newStatus)
                         }>
                             {
                             status === 1 ? "Unlisted" : "Relisted"
                         }</Button>
-                        <div>{
+                        <div style={
+                            {textAlign: "center"}
+                        }>
+                            {
                             status === 1 ? "Unlisted" : "Listed"
                         }</div>
                     </span>
@@ -110,7 +119,9 @@ export default class ProductHome extends Component {
                 title: 'Operations', // donot add dataIndex attribute for columns that only provide operation
                 render: (product) => (
                     <span>
-                        <LinkButton>Update</LinkButton>
+                        <LinkButton onClick={
+                            () => this.props.history.push('/product/add', product)
+                        }>Update</LinkButton>
                         {/* use the second paramter to pass state to another component */}
                         <LinkButton onClick={
                             () => this.props.history.push('/product/info', {product})
@@ -169,7 +180,12 @@ export default class ProductHome extends Component {
             </div>
         );
         const extra = (
-            <Button type="primary">
+            <Button type="primary"
+                onClick={
+                    () => {
+                        this.props.history.push('/product/add')
+                    }
+            }>
                 <PlusOutlined/>
                 Add Product</Button>
         )
