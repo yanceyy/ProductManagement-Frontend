@@ -216,6 +216,7 @@ export default class Category extends Component {
                     }
                     loading={loading}
                     bordered
+                    pagination={{defaultPageSize:5,showQuickJumper:true}}
                     rowKey='_id'/>
             </Card>
         </div>

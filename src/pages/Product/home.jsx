@@ -103,7 +103,7 @@ export default class ProductHome extends Component {
                             }
                             onClick={
                                 () => this.updateStatus(_id, newStatus)
-                        }>
+                        }> 
                             {
                             status === 1 ? "Unlisted" : "Relisted"
                         }</Button>
@@ -111,7 +111,7 @@ export default class ProductHome extends Component {
                             {textAlign: "center"}
                         }>
                             {
-                            status === 1 ? "Unlisted" : "Listed"
+                            status === 1 ? "Listed" : "Unlisted"
                         }</div>
                     </span>
                 }

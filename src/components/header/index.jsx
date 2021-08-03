@@ -44,18 +44,17 @@ class HeaderCom extends Component {
     };
 
     getTittle = () => {
+        //get the current path
         const currentPath = this.props.location.pathname;
         let title;
         menuList.forEach(item => {
             if (item.key == currentPath) {
                 title = item.title;
             } else if (item.children) {
-                const pageNname = item.children.find(x => x.key === currentPath)
+                //if currentpath has the x.key starts
+                const pageNname = item.children.find(x => currentPath.indexOf(x.key)===0)
                 if (pageNname) 
                     title = pageNname.title;
-                
-
-
             }
         })
         return title;

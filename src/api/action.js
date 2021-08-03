@@ -99,3 +99,30 @@ export const readdupdateProduct = (product) => ajax(BASEURL + "/manage/product/"
 product._id ? "update" : "add"), {
     ...product
 }, 'POST')
+
+
+/*
+Obatin role list
+*/
+
+export const regetRoleList = () => ajax(BASEURL + "/manage/role/list", 'GET')
+
+/*
+Create role
+*/
+
+export const reCreateRole = (roleName) => ajax(BASEURL + "/manage/role/add", {
+    roleName
+}, 'POST')
+
+
+/*
+Update role
+*/
+
+export const reupdateRole = ({_id, menus, auth_time, auth_name}) => ajax(BASEURL + "/manage/role/update", {
+    _id,
+    menus,
+    auth_time,
+    auth_name
+}, 'POST')
