@@ -126,3 +126,57 @@ export const reupdateRole = ({_id, menus, auth_time, auth_name}) => ajax(BASEURL
     auth_time,
     auth_name
 }, 'POST')
+
+
+/*
+Add user
+*/
+
+export const readdUser = ({
+    username,
+    password,
+    phone,
+    email,
+    role_id
+}) => ajax(BASEURL + "/manage/user/add", {
+    username,
+    password,
+    phone,
+    email,
+    role_id
+}, 'POST')
+
+
+/*
+Obatin user list
+*/
+
+export const regetUserList = () => ajax(BASEURL + "/manage/user/list", 'GET')
+
+
+
+/*
+Delete user
+*/
+
+export const redeleteUser = (userId) => ajax(BASEURL + "/manage/user/delete",{userId}, 'POST')
+
+/*
+Add user
+*/
+
+export const reupdateUser = ({
+    _id,
+    username,
+    password,
+    phone,
+    email,
+    role_id
+}) => ajax(BASEURL + "/manage/user/update", {
+    _id,
+    username,
+    password,
+    phone,
+    email,
+    role_id
+}, 'POST')
