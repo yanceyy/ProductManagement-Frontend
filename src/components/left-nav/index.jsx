@@ -3,14 +3,28 @@ import { Link ,withRouter} from "react-router-dom";
 import { Menu } from "antd";
 import menuList from "../../config/menu";
 import "./index.less";
+import memoryUtils from "../../utils/memoryUtils"
 
 const { SubMenu } = Menu;
 
 class LeftNav extends Component {
-
+  hasAuth =(item)=>{
+    const {key,isPublic}=item
+    const menus = memoryUtils.user.role.menus
+    const username = memoryUtils.user.username
+    if(username==="admin" || isPublic||menus.indexOf(key)!==-1){
+      return true
+    }else if(item.children){
+      console.log(item.children)
+      console.log(menus)
+      return item.children.some(x=>menus.indexOf(x.key)!==-1)
+    }
+    return false
+  }
   openKey = []
   getMenuNodes = (menuList) => {
     return menuList.map((item) => {
+      if(this.hasAuth(item)){
       if (!item.children) {
         return (
           <Menu.Item key={item.key} icon={item.icon}>
@@ -27,7 +41,7 @@ class LeftNav extends Component {
           </SubMenu>
         );
       }
-    });
+    }});
   };
 
   componentWillMount(){

@@ -10,9 +10,9 @@ import {PAGE_SIZE} from '../../utils/constants'
 import {regetRoleList, reCreateRole, reupdateRole} from '../../api/action'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
-import memoryUtils from '../../utils/memoryUtils'
-import { formatDate } from 'tough-cookie'
 import {formateDate} from '../../utils/dateUtils'
+import storageUtils from "../../utils/storageUtils";
+import memoryUtils from "../../utils/memoryUtils";
 
 
 export default class Role extends Component {
@@ -23,7 +23,7 @@ export default class Role extends Component {
         showStatus: 0
     }
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.authFrom = React.createRef()
     }
@@ -83,23 +83,35 @@ export default class Role extends Component {
             } else 
                 message.error("add failed")
 
+
             
+
 
         }).catch(() => {})
     }
 
     updateRole = async () => { // similar to add category
-       const {role} = this.authFrom.current.state
-       console.log(role)
-       role.auth_name = memoryUtils.user.username
-       const result = await reupdateRole(role)
+        const {role} = this.authFrom.current.state
+        console.log(role)
+        role.auth_name = memoryUtils.user.username
+        const result = await reupdateRole(role)
         if (result.status === 0) {
-            message.success("add successfully")
-            this.setState({role}) // update the outdate role state
-            this.setState({showStatus: 0}) 
-            this.getTableData() // update loaded data
+            // if the user current change the property of self,
+            // then require to relogin
+            if (memoryUtils.user.role_id === role._id) {
+                storageUtils.removeUser();
+                memoryUtils.user = {};
+                this.props.history.replace("/login");
+                message.success("role changes please relogin")
+            } else {
+                message.success("add successfully")
+                this.setState({role}) // update the outdate role state
+                this.setState({showStatus: 0})
+                this.getTableData() // update loaded data
+            }
         } else 
             message.error("add failed")
+        
     }
 
 
@@ -152,7 +164,7 @@ export default class Role extends Component {
                     }/>
                 </Modal>
             <Modal title="Update Role"
-            destroyOnClose={true}
+                destroyOnClose={true}
                 visible={
                     showStatus === 2
                 }
@@ -164,12 +176,15 @@ export default class Role extends Component {
                         this.setState({showStatus: 0})
                     }
             }>
-                <AuthForm ref={this.authFrom} setForm={
-                    (form) => {
-                        this.form = form
-                    }}
-                    role={role}
-                />
+                <AuthForm ref={
+                        this.authFrom
+                    }
+                    setForm={
+                        (form) => {
+                            this.form = form
+                        }
+                    }
+                    role={role}/>
             </Modal>
         <Table dataSource={roles}
             onRow={

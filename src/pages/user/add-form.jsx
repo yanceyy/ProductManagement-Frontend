@@ -44,7 +44,6 @@ export default class AddForm extends Component {
         // check is update or add mode
         if(showStatus===2){
             selectedUser = this.props.selectedUser
-            selectedUser.password="" // since the stored password is hashed,it cann't be used
         }
         return (
             <Form ref={
@@ -67,8 +66,8 @@ export default class AddForm extends Component {
                 }>
                     <Input></Input>
                 </Item>
-                <Item name="password" label="Password" required initialValue=""
-                    rules={
+                <Item name="password" label="Password" hidden={showStatus===2} required
+                    rules={showStatus===2?null:
                         [
                             {
                                 required: true,

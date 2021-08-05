@@ -50,7 +50,7 @@ const menuList = [
   
     {
       title: 'Charts',
-      key: '/charts',
+      key: '/chart',
       icon: <AreaChartOutlined />,
       children: [
         {

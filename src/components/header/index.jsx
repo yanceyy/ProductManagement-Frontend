@@ -13,7 +13,6 @@ class HeaderCom extends Component {
     */
         storageUtils.removeUser();
         memoryUtils.user = {};
-        console.log(this.props);
         this.props.history.push("/login");
         // event.preventDefault()
     };
