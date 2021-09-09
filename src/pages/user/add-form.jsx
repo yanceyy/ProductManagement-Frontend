@@ -17,6 +17,7 @@ export default class AddForm extends Component {
 
     componentDidMount() {
         this.props.getOutput(this.formRef.current)
+        this.props.getOutput(this.getFromValues)
     }
 
     //catch the value of selector
@@ -33,10 +34,6 @@ export default class AddForm extends Component {
         })
       }
 
-
-    componentDidMount(){
-        this.props.getOutput(this.getFromValues)
-    }
 
     render() {
         const {roles,showStatus} = this.props
@@ -100,8 +97,8 @@ export default class AddForm extends Component {
                         filterOption={
                             (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }>
-                        {roles.map(item=>{
-                            return (<Option value={item._id}>{item.name}</Option>)
+                        {roles.map((item,index)=>{
+                            return (<Option key = {index} value={item._id}>{item.name}</Option>)
                         })}
                     </Select>,
                 </Item>

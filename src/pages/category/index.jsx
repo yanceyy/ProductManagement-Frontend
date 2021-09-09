@@ -4,8 +4,7 @@ import {
     Button,
     Table,
     message,
-    Modal,
-    Input
+    Modal
 } from 'antd';
 import {PlusOutlined, ArrowRightOutlined} from "@ant-design/icons";
 import LinkButton from '../../components/link-button';
@@ -45,7 +44,7 @@ export default class Category extends Component {
 
 
     showSubcategories = (category) => {
-        const {parentId, name, _id} = category;
+        const { name, _id} = category;
         // const subCategoryNames = this.getCategoryNames()
         this.setState({
             parentName: name,
@@ -90,7 +89,7 @@ export default class Category extends Component {
         this.setState({showStatus: 2})
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.getInitialColumnsNames()
 
     }

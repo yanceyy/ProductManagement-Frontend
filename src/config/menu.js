@@ -8,68 +8,63 @@ import {
     AreaChartOutlined,
     BarChartOutlined,
     LineChartOutlined,
-    PieChartOutlined,
-  } from '@ant-design/icons';
-
+    PieChartOutlined
+} from '@ant-design/icons';
+import React from 'react';
 
 const menuList = [
     {
-      title: 'Main', // menu title
-      key: '/home', // path
-      icon: <HomeOutlined />, // icon name
-      isPublic: true, // public
+        title: 'Home', // menu title
+        key: '/home', // path
+        icon: <HomeOutlined />, // icon name
+        isPublic: true, // public
     },
     {
-      title: 'Produces',
-      key: '/products',
-      icon: <AppstoreOutlined />,
-      children: [ // children menu
-        {
-          title: 'manage category',
-          key: '/category',
-          icon: <BarsOutlined />
-        },
-        {
-          title: 'manage products',
-          key: '/product',
-          icon: <ToolOutlined />
-        },
-      ]
+        title: 'Produces',
+        key: '/products',
+        icon: <AppstoreOutlined />,
+        children: [
+            { // children menu
+                title: 'Manage category',
+                key: '/category',
+                icon: <BarsOutlined />
+            }, {
+                title: 'Manage products',
+                key: '/product',
+                icon: <ToolOutlined />
+            },
+        ]
     },
-  
+
     {
-      title: 'manage users',
-      key: '/user',
-      icon: <UserOutlined />
+        title: 'Manage users',
+        key: '/user',
+        icon: <UserOutlined />
     },
     {
-      title: 'manage roles',
-      key: '/role',
-      icon: <SafetyCertificateOutlined />,
+        title: 'Manage roles',
+        key: '/role',
+        icon: <SafetyCertificateOutlined />
+    }, {
+        title: 'Charts',
+        key: '/chart',
+        icon: <AreaChartOutlined />,
+        children: [
+            {
+                title: 'Bar',
+                key: '/chart/bar',
+                icon: <BarChartOutlined />
+            }, {
+                title: 'Line',
+                key: '/chart/line',
+                icon: <LineChartOutlined />
+            }, {
+                title: 'Pie',
+                key: '/chart/pie',
+                icon: <PieChartOutlined />
+            },
+        ]
     },
-  
-    {
-      title: 'Charts',
-      key: '/chart',
-      icon: <AreaChartOutlined />,
-      children: [
-        {
-          title: 'Bar',
-          key: '/chart/bar',
-          icon: <BarChartOutlined />
-        },
-        {
-          title: 'Line',
-          key: '/chart/line',
-          icon: <LineChartOutlined />
-        },
-        {
-          title: 'Pie',
-          key: '/chart/pie',
-          icon: <PieChartOutlined />
-        },
-      ]
-    },
-  ]
-  
-  export default menuList
+]
+
+export default menuList

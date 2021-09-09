@@ -10,7 +10,7 @@ const MAXIMUM_TIMEOUT = 10000;
 
 export default function ajax(url, data = {}, type = "GET") {
     let request;
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve)=>{
         if(type==="GET"){ // GET request
             request =  axios.get(url,{
                 params:data},{timeout:MAXIMUM_TIMEOUT});

@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
-import {Select, Form, Input} from 'antd'
+import {Form, Input} from 'antd'
 import PropTypes from 'prop-types';
 const Item = Form.Item
-const Option = Select.Option
 
 
 export default class UpdateForm extends Component {
