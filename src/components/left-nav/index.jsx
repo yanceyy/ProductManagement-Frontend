@@ -1,42 +1,46 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Menu } from 'antd';
+import React, {useState, useEffect} from 'react';
+import {Link, useLocation} from 'react-router-dom';
+import {Menu} from 'antd';
 import menuList from '../../config/menu';
 import './index.less';
 import memoryUtils from '../../utils/memoryUtils';
-import { connect } from 'react-redux';
-import { setHeadTitle } from '../../redux/actions';
-const { SubMenu } = Menu;
+import {connect} from 'react-redux';
+import {setHeadTitle} from '../../redux/actions';
 
-class LeftNav extends Component {
-    hasAuth = (item) => {
-        const { key, isPublic } = item;
+const {SubMenu} = Menu;
+
+function LeftNav(props) {
+    const location = useLocation();
+
+    const [openKey, setOpenKey] = useState([]);
+    const [menuNodes, setMenuNodes] = useState([]);
+
+    const hasAuth = (item) => {
+        const {key, isPublic} = item;
         const menus = memoryUtils.user.role.menus;
         const username = memoryUtils.user.username;
         if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
             return true;
         } else if (item.children) {
-            console.log(item.children);
-            console.log(menus);
             return item.children.some((x) => menus.indexOf(x.key) !== -1);
         }
         return false;
     };
-    openKey = [];
-    getMenuNodes = (menuList) => {
-        const path = this.props.location.pathname;
+
+    const getMenuNodes = (menuList) => {
+        const path = location.pathname;
         return menuList.map((item) => {
-            if (this.hasAuth(item)) {
+            if (hasAuth(item)) {
                 if (!item.children) {
                     if (item.key === path || path.indexOf(item.key) === 0) {
-                        this.props.setHeadTitle(item.title);
+                        props.setHeadTitle(item.title);
                     }
                     return (
                         <Menu.Item key={item.key} icon={item.icon}>
                             <Link
                                 to={item.key}
                                 onClick={() =>
-                                    this.props.setHeadTitle(item.title)
+                                    props.setHeadTitle(item.title)
                                 }
                             >
                                 {item.title}
@@ -47,11 +51,11 @@ class LeftNav extends Component {
                     /* decide which tab is opened */
                     const cItem = item.children.find(
                         (cItem) =>
-                            this.props.location.pathname.indexOf(cItem.key) ===
+                            location.pathname.indexOf(cItem.key) ===
                             0
                     );
                     if (cItem) {
-                        this.openKey.push(item.key);
+                        setOpenKey([...openKey, item.key]);
                     }
                     return (
                         <SubMenu
@@ -59,7 +63,7 @@ class LeftNav extends Component {
                             icon={item.icon}
                             title={item.title}
                         >
-                            {this.getMenuNodes(item.children)}
+                            {getMenuNodes(item.children)}
                         </SubMenu>
                     );
                 }
@@ -67,53 +71,28 @@ class LeftNav extends Component {
         });
     };
 
-    UNSAFE_componentWillMount() {
-        this.menuNodes = this.getMenuNodes(menuList);
+    useEffect(() => {
+        setMenuNodes(getMenuNodes(menuList));
+    }, []);
+
+    let path = location.pathname;
+    if (path.indexOf('/product') === 0) {
+        path = '/product';
     }
 
-    render() {
-        let path = this.props.location.pathname;
-        if (path.indexOf('/product') === 0) {
-            path = '/product';
-        }
-        return (
-            <div className="left-nav">
-                <Link to="/" className="left-nav-header">
-                    <h1>Admin board</h1>
-                </Link>
-                {/* use this.props.location.pathname to set highlight  */}
-                <Menu
-                    selectedKeys={[path]}
-                    mode="inline"
-                    theme="dark"
-                    defaultOpenKeys={this.openKey}
-                >
-                    {this.menuNodes}
-                    {/* <Menu.Item key="1" icon={<PieChartOutlined />}>
-            <Link to="/home">Main</Link>
-          </Menu.Item>
-
-          <Menu.Item key="4" icon={<ContainerOutlined />}>
-            <Link to="/user">User Control</Link>
-          </Menu.Item>
-          <Menu.Item key="5" icon={<ContainerOutlined />}>
-            <Link to="/role">Job Control</Link>
-          </Menu.Item>
-          <SubMenu key="sub2" icon={<MailOutlined />} title="Chart">
-            <Menu.Item key="6" icon={<MailOutlined />}>
-              <Link to="/chart/bar">bar</Link>
-            </Menu.Item>
-            <Menu.Item key="7" icon={<MailOutlined />}>
-              <Link to="/chart/line">line</Link>
-            </Menu.Item>
-            <Menu.Item key="8" icon={<MailOutlined />}>
-              <Link to="/chart/pie"> pie</Link>
-            </Menu.Item>
-          </SubMenu> */}
-                </Menu>
-            </div>
-        );
-    }
+    return (
+        <div className="left-nav">
+            {/* use location.pathname to set highlight  */}
+            <Menu
+                selectedKeys={[path]}
+                mode="inline"
+                theme="dark"
+                defaultOpenKeys={openKey}
+            >
+                {menuNodes}
+            </Menu>
+        </div>
+    );
 }
 
-export default connect(null, { setHeadTitle })(withRouter(LeftNav));
+export default connect(null, {setHeadTitle})(LeftNav);

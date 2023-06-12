@@ -1,7 +1,6 @@
 import ajax from "./ajax"
 
-const BASEURL = "http://localhost:5000"
-
+const BASEURL = "https://adminapp.fly.dev"
 
 /*
 account login
@@ -96,7 +95,7 @@ Add and update products
 */
 
 export const readdupdateProduct = (product) => ajax(BASEURL + "/manage/product/" + (
-product._id ? "update" : "add"), {
+    product._id ? "update" : "add"), {
     ...product
 }, 'POST')
 
@@ -133,12 +132,12 @@ Add user
 */
 
 export const readdUser = ({
-    username,
-    password,
-    phone,
-    email,
-    role_id
-}) => ajax(BASEURL + "/manage/user/add", {
+                              username,
+                              password,
+                              phone,
+                              email,
+                              role_id
+                          }) => ajax(BASEURL + "/manage/user/add", {
     username,
     password,
     phone,
@@ -154,25 +153,24 @@ Obatin user list
 export const regetUserList = () => ajax(BASEURL + "/manage/user/list", 'GET')
 
 
-
 /*
 Delete user
 */
 
-export const redeleteUser = (userId) => ajax(BASEURL + "/manage/user/delete",{userId}, 'POST')
+export const redeleteUser = (userId) => ajax(BASEURL + "/manage/user/delete", {userId}, 'POST')
 
 /*
 Add user
 */
 
 export const reupdateUser = ({
-    _id,
-    username,
-    password,
-    phone,
-    email,
-    role_id
-}) => ajax(BASEURL + "/manage/user/update", {
+                                 _id,
+                                 username,
+                                 password,
+                                 phone,
+                                 email,
+                                 role_id
+                             }) => ajax(BASEURL + "/manage/user/update", {
     _id,
     username,
     password,

@@ -1,16 +1,11 @@
-import React, { Component } from 'react';
-import { Tree, Input } from 'antd';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {Tree, Input} from 'antd';
 import menuList from '../../config/menu';
 
 export default class AuthForm extends Component {
-    static propTypes = {
-        role: PropTypes.object.isRequired,
-    };
-
     constructor(props) {
         super(props);
-        this.state = { role: props.role };
+        this.state = {role: props.role};
 
         console.log('construction');
     }
@@ -22,13 +17,13 @@ export default class AuthForm extends Component {
     }
 
     onCheck = (checkedKeys) => {
-        const role = { ...this.state.role };
+        const role = {...this.state.role};
         role.menus = checkedKeys;
-        this.setState({ role });
+        this.setState({role});
     };
 
     render() {
-        const { role } = this.state;
+        const {role} = this.state;
         return (
             <>
                 <Input value={role.name} disabled></Input>

@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
-import { Form, Input } from 'antd';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {Form, Input} from 'antd';
 
 const Item = Form.Item;
 
 export default class AddForm extends Component {
-    static propTypes = {
-        setForm: PropTypes.func.isRequired,
-    };
-
     formRef = React.createRef();
 
     componentDidMount() {

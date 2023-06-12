@@ -1,50 +1,47 @@
-import React, {Component} from 'react';
+import {useState} from 'react';
 import {Card, Button} from 'antd';
 import ReactECharts from 'echarts-for-react';
 
-export default class Line extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            sales: [25, 20, 12, 35, 5, 15],
-            inventorys: [2, 56, 21, 32, 44, 12] 
-        }
-        this.getOption = this.getOption.bind(this);
-    }
-        
-    getOption(){
-        const {sales, inventorys} = this.state 
+const Line = () => {
+    const [sales, setSales] = useState([25, 20, 12, 35, 5, 15]);
+    const [inventorys, setInventorys] = useState([2, 56, 21, 32, 44, 12]);
+
+    const getOption = () => {
         return {
             title: {
                 text: 'Status'
             },
-            tooltip: {}, 
+            tooltip: {},
             legend: {
-                data:['Sales', 'inventry']
+                data: ['Sales', 'inventry']
             },
             xAxis: {
-                data: ["T-shirt","sweater","Chiffon shirt","Pants","heel","socks"]
+                data: ["T-shirt", "sweater", "Chiffon shirt", "Pants", "heel", "socks"]
             },
-            yAxis: {}, 
+            yAxis: {},
             series: [{
-                name: 'Sales', type: 'line', data:sales}, {
+                name: 'Sales', type: 'line', data: sales
+            }, {
                 name: 'inventry', type: 'line', data: inventorys
-            }]}
-            }
-        
-    update = () => {
-                const sales = this.state.sales.map(sale => sale + 1)
-                const inventorys = this.state.inventorys.map(inventory => inventory -1) 
-                this.setState({
-                sales,
-                inventorys
-                }) }
+            }]
+        };
+    }
 
-    render() { return (
-                <div> <Card>
-                <Button type='primary' onClick={this.update}>Update</Button> </Card>
-                <Card title='Bar one'>
-                <ReactECharts option={this.getOption()} style={{height: 300}}/>
-                </Card> </div>
-                ) }
+    const update = () => {
+        setSales(sales.map(sale => sale + 1));
+        setInventorys(inventorys.map(inventory => inventory - 1));
+    }
+
+    return (
+        <div>
+            <Card>
+                <Button type='primary' onClick={update}>Update</Button>
+            </Card>
+            <Card title='Bar one'>
+                <ReactECharts option={getOption()} style={{height: 300}}/>
+            </Card>
+        </div>
+    );
 }
+
+export default Line;

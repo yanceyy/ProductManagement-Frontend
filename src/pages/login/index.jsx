@@ -1,64 +1,59 @@
-import React, { Component } from 'react';
+import {useState} from 'react';
 import './login.less';
-import { login } from '../../api/action';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import {login} from '../../api/action';
+import {Form, Input, Button, Checkbox, message} from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
-import { Redirect } from 'react-router';
-/* 
+import {Redirect, useHistory} from 'react-router-dom';
+import Lottie from "lottie-react";
+import animationData from '../../images/homePage.json';
+
+/*
 router component for login page
 */
-export default class Login extends Component {
-    onFinish = async (values) => {
-        console.log('Success:', values);
-        console.log(values.username, values.password, values.remember);
+function Login() {
+    const [user, setUser] = useState(memoryUtils.user);
+    const history = useHistory();
+
+    const onFinish = async (values) => {
         const data = await login(values.username, values.password);
         if (data.status === 0) {
             memoryUtils.user = data.data;
             storageUtils.saveUser(data.data);
-            // memoryUtils.user
-            this.props.history.replace('/home');
+            setUser(data.data);
+            history.push('/home');
             message.success('success');
         } else {
             message.error('Wrong password or wrong username');
         }
     };
-    // login("zhad2wbwnn","12e121223").then(response=>console.log(response.data))
 
-    onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    if (user && user._id) {
+        return <Redirect to={"/"}/>
+    }
 
-    render() {
-        const user = memoryUtils.user;
-        if (user && user._id) {
-            console.log('has logged');
-            return <Redirect to="/" />;
-        }
-        return (
-            <div className="login">
-                <header className="login-header">
-                    <h1>User Admin</h1>
-                </header>
-                <section className="login-section">
-                    <h2>Login</h2>
+    return (
+        <div className="login">
+            <section className="login-section">
+                <section className="welcome-board">
+                    <Lottie style={{
+                        height: 300,
+                    }} animationData={animationData}/>
+                </section>
+                <section className="form">
                     <Form
+                        layout="vertical"
                         name="basic"
-                        labelCol={{
-                            span: 6,
-                        }}
-                        wrapperCol={{
-                            span: 16,
-                        }}
+                        requiredMark={false}
                         initialValues={{
                             remember: true,
                         }}
-                        onFinish={this.onFinish}
-                        onFinishFailed={this.onFinishFailed}
+                        onFinish={onFinish}
                     >
                         <Form.Item
                             label="Username"
                             name="username"
+                            initialValue={"admin"}
                             rules={[
                                 {
                                     required: true,
@@ -81,12 +76,13 @@ export default class Login extends Component {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input/>
                         </Form.Item>
 
                         <Form.Item
                             label="Password"
                             name="password"
+                            initialValue={"admin"}
                             rules={[
                                 {
                                     required: true,
@@ -114,15 +110,15 @@ export default class Login extends Component {
                                 },
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password/>
                         </Form.Item>
 
                         <Form.Item
                             name="remember"
                             valuePropName="checked"
                             wrapperCol={{
-                                offset: 8,
-                                span: 16,
+                                justify: "center",
+                                align: "middle"
                             }}
                         >
                             <Checkbox>Remember me</Checkbox>
@@ -130,21 +126,22 @@ export default class Login extends Component {
 
                         <Form.Item
                             wrapperCol={{
-                                offset: 10,
-                                span: 16,
+                                justify: "center",
+                                align: "middle"
                             }}
                         >
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                                onClick={this.submitLogin}
                             >
                                 Submit
                             </Button>
                         </Form.Item>
                     </Form>
                 </section>
-            </div>
-        );
-    }
+            </section>
+        </div>
+    );
 }
+
+export default Login;

@@ -4,8 +4,9 @@ module.exports = {
         browser: true,
         es2021: true
     },
+    ignorePatterns: ["node_modules", "dist/**/*", "webpack.config.js"],
     extends: [
-        "eslint:recommended", "plugin:react/recommended"
+        "eslint:recommended", "plugin:react/recommended", "plugin:react/jsx-runtime"
     ],
     parserOptions: {
         ecmaFeatures: {

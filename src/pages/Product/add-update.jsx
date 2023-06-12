@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Card, Button, Form, Input, Cascader, message } from 'antd';
+import React, {Component} from 'react';
+import {Card, Button, Form, Input, Cascader, message} from 'antd';
 import LinkButton from '../../components/link-button';
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { regetCategory } from '../../api/action';
+import {ArrowLeftOutlined} from '@ant-design/icons';
+import {regetCategory} from '../../api/action';
 import PicturesWall from './pictures-wall';
 import RichTextEditor from './richTextEditor';
-import { readdupdateProduct } from '../../api/action';
+import {readdupdateProduct} from '../../api/action';
 /*
 component for adding and updating products
 */
@@ -21,7 +21,7 @@ export default class ProductAddUpdate extends Component {
         this.formRef.current
             .validateFields()
             .then(async (values) => {
-                const { productName, productDetail, price, category } = values;
+                const {productName, productDetail, price, category} = values;
                 let categories;
                 // check the level of category
                 if (category.length === 2) {
@@ -56,7 +56,10 @@ export default class ProductAddUpdate extends Component {
                     message.error('failed');
                 }
             })
-            .catch(() => message.error('please complete the table'));
+            .catch((e) => {
+                console.error(e);
+                message.error('please complete the table')
+            });
     };
 
     /*
@@ -65,13 +68,13 @@ initl the options for the categories
     initOptions = async (categories) => {
         console.log(categories);
         const options = categories.map((item) => {
-            return { value: item._id, label: item.name, isLeaf: false };
+            return {value: item._id, label: item.name, isLeaf: false};
         });
         /*
         used when updating, since we need to get the subcategory data before set it as defalut values
         */
-        const { isUpdate, product } = this;
-        const { pCategoryId } = product;
+        const {isUpdate, product} = this;
+        const {pCategoryId} = product;
         if (isUpdate && pCategoryId != 0) {
             const subcategories = await this.getCategoryArray(pCategoryId);
             const categorywithsubId = options.findIndex(
@@ -80,7 +83,7 @@ initl the options for the categories
             options[categorywithsubId]['children'] =
                 this.addOptions(subcategories);
         }
-        this.setState({ options });
+        this.setState({options});
     };
 
     /*
@@ -89,7 +92,7 @@ initl the options for the categories
     addOptions = (categories) => {
         console.log(categories);
         const options = categories.map((c) => {
-            return { value: c._id, label: c.name, isLeaf: true };
+            return {value: c._id, label: c.name, isLeaf: true};
         });
         return options;
     };
@@ -127,12 +130,13 @@ initl the options for the categories
         targetOption.loading = false;
         this.setState({}); // require render the page
     };
+
     render() {
-        const { Item } = Form;
-        const { TextArea } = Input;
+        const {Item} = Form;
+        const {TextArea} = Input;
         // used for updating
-        const { isUpdate, product } = this;
-        const { pCategoryId, categoryId, imgs, detail } = product;
+        const {isUpdate, product} = this;
+        const {pCategoryId, categoryId, imgs, detail} = product;
         const categoryIds = [];
         if (isUpdate) {
             if (pCategoryId == 0) categoryIds.push(categoryId);
@@ -151,7 +155,7 @@ initl the options for the categories
         const title = (
             <div>
                 <LinkButton onClick={() => this.props.history.push('/product')}>
-                    <ArrowLeftOutlined />
+                    <ArrowLeftOutlined/>
                 </LinkButton>
                 {isUpdate ? 'Update Product' : 'Add Product'}{' '}
             </div>
@@ -175,7 +179,7 @@ initl the options for the categories
                             },
                         ]}
                     >
-                        <Input />
+                        <Input/>
                     </Item>
                     <Item
                         name="productDetail"
@@ -193,7 +197,7 @@ initl the options for the categories
                         ]}
                     >
                         {/* set the minimum rows of the input area */}
-                        <TextArea autosize={{ minRows: 2 }}></TextArea>
+                        <TextArea autosize={{minRows: 2}}></TextArea>
                     </Item>
                     <Item
                         label="Price"
@@ -246,8 +250,8 @@ initl the options for the categories
                         />
                     </Item>
                     <Item
-                        labelCol={{ span: 2 }}
-                        wrapperCol={{ span: 16 }}
+                        labelCol={{span: 2}}
+                        wrapperCol={{span: 16}}
                         name="description"
                         label="Description"
                     >

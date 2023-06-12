@@ -1,20 +1,19 @@
-import React, {Component,lazy,Suspense} from "react";
-import Login from "./pages/login";
+import {lazy, Suspense} from "react";
 import {Switch, BrowserRouter, Route} from "react-router-dom";
-const Admin = lazy(()=>import("./pages/admin"))
-export default class App extends Component {
-    render() {
-        return (<BrowserRouter>
-            <Suspense fallback={<div>loading</div>}> 
-            <Switch>
-                <Route path="/login"
-                    component={Login}></Route>
+import "./index.less";
+import {Loading} from "./components/common/Loading";
 
-                    <Route path="/"
-                    component={Admin}></Route>
+const Admin = lazy(() => import("./pages/admin"))
+const Login = lazy(() => import("./pages/login"))
 
-            </Switch>
+export default function App() {
+    return (
+        <BrowserRouter>
+            <Suspense fallback={<Loading/>}>
+                <Switch>
+                    <Route path="/login" component={Login}></Route>
+                    <Route path="/" component={Admin}></Route>
+                </Switch>
             </Suspense>
         </BrowserRouter>);
-    }
 }

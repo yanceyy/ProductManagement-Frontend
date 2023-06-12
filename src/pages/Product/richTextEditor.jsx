@@ -1,19 +1,13 @@
-import React, { Component } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
+import React, {Component} from 'react';
+import {Editor} from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import {EditorState, convertToRaw, ContentState} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import PropTypes from 'prop-types';
 
 class RichTextEditor extends Component {
-    static propTypes = {
-        detail: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
-        console.log('detial', this.props.detail);
         // used for updating
         if (this.props.detail) {
             const contentBlock = htmlToDraft(this.props.detail);
@@ -32,21 +26,22 @@ class RichTextEditor extends Component {
     }
 
     onEditorStateChange = (editorState) => {
-        this.setState({ editorState });
+        this.setState({editorState});
     };
 
     // used for pass data to parent component
     componentDidMount() {
         this.props.bindDtails(this.getDetail);
     }
+
     // get input text to raw html format
     getDetail = () => {
-        const { editorState } = this.state;
+        const {editorState} = this.state;
         return draftToHtml(convertToRaw(editorState.getCurrentContent()));
     };
 
     render() {
-        const { editorState } = this.state;
+        const {editorState} = this.state;
         return (
             <>
                 <Editor
