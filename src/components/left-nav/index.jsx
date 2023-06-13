@@ -1,5 +1,6 @@
-import {useState, useEffect} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {useState, useMemo, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {Menu} from 'antd';
 import menuList from '../../config/menu';
 import './index.less';
@@ -7,13 +8,11 @@ import memoryUtils from '../../utils/memoryUtils';
 import {connect} from 'react-redux';
 import {setHeadTitle} from '../../redux/actions';
 
-const {SubMenu, Item} = Menu;
-
 function LeftNav(props) {
     const location = useLocation();
+    const history = useHistory();
 
     const [openKey, setOpenKey] = useState([]);
-    const [menuNodes, setMenuNodes] = useState([]);
 
     const hasAuth = (item) => {
         const {key, isPublic} = item;
@@ -27,61 +26,52 @@ function LeftNav(props) {
         return false;
     };
 
-    const getMenuNodes = (menuList) => {
-
+    const getMenuItems = useCallback((menuList) => {
         const path = location.pathname;
-
         return menuList.map((item) => {
             if (hasAuth(item)) {
                 if (!item.children) {
                     if (item.key === path || path.indexOf(item.key) === 0) {
                         props.setHeadTitle(item.title);
                     }
-                    return (
-                        <Item key={item.key} icon={item.icon}>
-                            <Link
-                                to={item.key}
-                                onClick={() =>
-                                    props.setHeadTitle(item.title)
-                                }
-                            >
-                                {item.title}
-                            </Link>
-                        </Item>
-                    );
+                    return ({
+                        key: item.key,
+                        icon: item.icon,
+                        label: item.title
+                    });
                 } else {
                     /* decide which tab is opened */
                     const cItem = item.children.find(
                         (cItem) =>
                             cItem.key.startsWith(path)
                     );
-                    console.log(item.children, cItem)
                     if (cItem) {
-                        setOpenKey([...openKey, item.key]);
+                        setOpenKey([item.key]);
                     }
-                    return (
-                        <SubMenu
-                            key={item.key}
-                            icon={item.icon}
-                            title={item.title}
-                        >
-                            {getMenuNodes(item.children)}
-                        </SubMenu>
-                    );
+                    return ({
+                        key: item.key,
+                        icon: item.icon,
+                        label: item.title,
+                        children: getMenuItems(item.children)
+                    });
                 }
             }
         });
-    };
+    }, [location.pathname, props]);
 
-    useEffect(() => {
-        setMenuNodes(getMenuNodes(menuList));
-    }, []);
+    const menuItems = useMemo(() => {
+        return getMenuItems(menuList);
+    }, [getMenuItems]);
+
+    const onClick = (e) => {
+        history.push(e.key);
+    };
 
     let path = location.pathname;
     if (path.indexOf('/product') === 0) {
         path = '/product';
     }
-    console.log({openKey})
+
     return (
         <div className="left-nav">
             {/* use location.pathname to set highlight  */}
@@ -90,9 +80,9 @@ function LeftNav(props) {
                 mode="inline"
                 theme="dark"
                 defaultOpenKeys={openKey}
-            >
-                {menuNodes}
-            </Menu>
+                items={menuItems}
+                onClick={onClick}
+            />
         </div>
     );
 }

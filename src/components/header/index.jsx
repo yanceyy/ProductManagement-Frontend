@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import './index.less';
 import storageUtils from '../../utils/storageUtils';
@@ -50,7 +50,7 @@ function HeaderCom({headTitle}) {
             </div>
             <div className="header-bottom">
                 <div className="header-bottom-left">
-                    {headTitle}{' '}
+                    {headTitle}
                 </div>
 
                 <div className="header-bottom-right">

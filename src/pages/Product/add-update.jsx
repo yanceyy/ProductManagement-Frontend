@@ -25,9 +25,10 @@ export default function ProductAddUpdate() {
     const history = useHistory();
     const selectedProduct = history.location.state;
     const isUpdate = !!selectedProduct;
+    console.log({selectedProduct})
     const [options, setOptions] = useState([]);
     const formRef = useRef();
-    const [uploadedPicture, setUploadPictures] = useState(null);
+    const [uploadedPicture, setUploadPictures] = useState(selectedProduct ? selectedProduct.imgs : []);
     const [details, setDetails] = useState(selectedProduct ? selectedProduct.detail : "");
 
     const submit = useCallback(() => {
@@ -101,7 +102,6 @@ export default function ProductAddUpdate() {
         const options = categories.map((item) => {
             return {value: item._id, label: item.name, isLeaf: false};
         });
-        console.log("init option", initOptions)
         /*
         used when updating, since we need to get the subcategory data before set it as defalut values
         */

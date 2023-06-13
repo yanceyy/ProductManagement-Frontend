@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Card, List} from 'antd';
+import {useState, useEffect} from 'react';
+import {Card, List, Image} from 'antd';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 import './product.less';
-import {IMG_URL} from '../../utils/constants';
+import {IMAGE_UPLOAD_URL} from '../../utils/constants';
 import {regetCategoryById} from '../../api/action';
 
 /*
@@ -69,11 +69,10 @@ function ProductPage(props) {
                     <span className="left-col">Pictures:</span>
                     <span className="right-col">
                         {imgs.map((img, index) => (
-                            <img
+                            <Image
                                 key={index}
                                 className="productimgs"
-                                src={IMG_URL + img}
-                                alt=""
+                                src={IMAGE_UPLOAD_URL + img}
                             />
                         ))}
                     </span>

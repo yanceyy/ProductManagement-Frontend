@@ -200,14 +200,13 @@ export default class Category extends Component {
                                this.setState({showStatus: 0})
                            }
                        }>
-                    <UpdateForm categoryName={
-                        category.name
-                    }
+                    <UpdateForm categoryName={category.name}
                                 setForm={
                                     (form) => {
                                         this.form = form
                                     }
-                                }/> {/*get the reference to the form*/} </Modal>
+                                }/>
+                </Modal>
                 <Card title={title}
                       extra={extra}>
                     <Table dataSource={

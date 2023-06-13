@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Upload, Modal, message} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 import {redeletePicture} from '../../api/action';
+import {IMAGE_UPLOAD, IMAGE_UPLOAD_URL} from "../../utils/constants";
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -23,7 +24,7 @@ class PicturesWall extends Component {
                     uid: (-index).toString(),
                     name: img,
                     status: 'done',
-                    url: 'http://localhost:5000/upload/' + img,
+                    url: IMAGE_UPLOAD_URL + img,
                 };
             });
         }
@@ -79,15 +80,12 @@ class PicturesWall extends Component {
             }
         }
         this.setState({fileList});
+        this.props.bindPictures(fileList.map(item => item.name));
     };
 
     // transfor picture names to parent companent
     getImgs = () => {
         return this.state.fileList.map((file) => file.name);
-    };
-
-    componentDidMount = () => {
-        this.props.bindPictures(this.getImgs);
     };
 
     render() {
@@ -102,7 +100,7 @@ class PicturesWall extends Component {
         return (
             <>
                 <Upload
-                    action="http://localhost:3000/manage/img/upload"
+                    action={IMAGE_UPLOAD}
                     listType="picture-card"
                     fileList={fileList}
                     accept="image/*"

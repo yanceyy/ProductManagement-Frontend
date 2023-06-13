@@ -1,6 +1,5 @@
 import ajax from "./ajax"
-
-const BASEURL = "https://adminapp.fly.dev"
+import {BASEURL} from "../utils/constants";
 
 /*
 account login
