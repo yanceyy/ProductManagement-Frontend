@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo} from 'react';
+import {useState, useRef, useEffect, useCallback, useMemo} from 'react';
 import {Button, Card, Cascader, Form, Input, message} from 'antd';
 import LinkButton from '../../components/link-button';
 import {ArrowLeftOutlined} from '@ant-design/icons';
@@ -25,7 +25,6 @@ export default function ProductAddUpdate() {
     const history = useHistory();
     const selectedProduct = history.location.state;
     const isUpdate = !!selectedProduct;
-    console.log({selectedProduct})
     const [options, setOptions] = useState([]);
     const formRef = useRef();
     const [uploadedPicture, setUploadPictures] = useState(selectedProduct ? selectedProduct.imgs : []);
@@ -75,7 +74,7 @@ export default function ProductAddUpdate() {
                 console.error(e);
                 message.error('please complete the table')
             });
-    }, [details, history, uploadedPicture]);
+    }, [details, history, uploadedPicture, selectedProduct]);
 
     const getCategoryArray = useCallback(async (parentId) => {
         const firstCategories = await regetCategory(parentId);
@@ -107,13 +106,12 @@ export default function ProductAddUpdate() {
         */
         if (isUpdate) {
             const {pCategoryId} = selectedProduct;
-            if (pCategoryId !== 0) {
+            if (pCategoryId!=='0') {
                 const subcategories = await getCategoryArray(pCategoryId);
-                const categorywithsubId = options.findIndex(
+                const categoryWithSubId = options.findIndex(
                     (item) => item.value === pCategoryId
                 );
-                options[categorywithsubId]['children'] =
-                    addOptions(subcategories);
+                options[categoryWithSubId]['children'] =addOptions(subcategories);
             }
         }
         setOptions(options);
@@ -144,7 +142,7 @@ export default function ProductAddUpdate() {
         const categoryIds = [];
         if (isUpdate) {
             const {pCategoryId, categoryId} = selectedProduct;
-            if (pCategoryId === 0) categoryIds.push(categoryId);
+            if (pCategoryId === "0") categoryIds.push(categoryId);
             else {
                 categoryIds.push(pCategoryId, categoryId);
             }

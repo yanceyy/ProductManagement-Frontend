@@ -32,13 +32,7 @@ class PicturesWall extends Component {
             previewVisible: false,
             previewImage: '',
             previewTitle: '',
-            fileList: fileList,
-            // {
-            //     uid: '-1', // unique id for each file
-            //     name: 'image.png', // picture name
-            //     status: 'done',  // the satus:{uploading error removed}
-            //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png' // the url of picture
-            // },
+            fileList: fileList
         };
     }
 
@@ -58,14 +52,12 @@ class PicturesWall extends Component {
     };
 
     handleChange = async ({file, fileList}) => {
-        console.log(fileList);
         if (file.status === 'done') {
             const result = file.response;
             if (result.status === 0) {
                 message.success('upload successfully');
                 const {name, url} = result.data;
-                console.log(result.data);
-                const file = fileList[fileList.length - 1]; // can use negative index like Python
+                const file = fileList[fileList.length - 1];
                 file.name = name;
                 file.url = url;
             } else {
@@ -112,7 +104,7 @@ class PicturesWall extends Component {
                     {fileList.length >= 8 ? null : uploadButton}{' '}
                 </Upload>
                 <Modal
-                    visible={previewVisible}
+                    open={previewVisible}
                     title={previewTitle}
                     footer={null}
                     onCancel={this.handleCancel}
