@@ -74,6 +74,7 @@ export default function ProductHome() {
             render: (price) => {
                 return 'AU$' + price;
             },
+            sorter: (a, b) => a.price - b.price
         },
         {
             title: 'Status',
@@ -167,6 +168,7 @@ export default function ProductHome() {
     return (
         <Card title={title} extra={extra}>
             <Table
+                style={{height: "100%"}}
                 bordered
                 columns={columns}
                 loading={loading}
@@ -179,6 +181,7 @@ export default function ProductHome() {
                     },
                     total,
                 }}
+                scroll={{y: 800}}
                 rowKey="_id"
                 dataSource={products}
             />

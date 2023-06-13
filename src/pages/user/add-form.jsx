@@ -17,7 +17,7 @@ export default class AddForm extends Component {
     onChange = (value) => {
         this.selectorValue = value
     }
-    
+
     getFromValues = () => {
         return this.formRef.current.validateFields().then(async values => {
             // the form componment cann't capture the value in Seletor
@@ -49,7 +49,7 @@ export default class AddForm extends Component {
                               message: "must be longer than 1!"
                           }, {
                               max: 12,
-                              message: "Ymust be shorter than 12!"
+                              message: "must be shorter than 12!"
                           },
                           ]
                       }>
@@ -66,7 +66,7 @@ export default class AddForm extends Component {
                               message: "must be longer than 1!"
                           }, {
                               max: 12,
-                              message: "Ymust be shorter than 12!"
+                              message: "must be shorter than 12!"
                           },
                           ]
                       }>

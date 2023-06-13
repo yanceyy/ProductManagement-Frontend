@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import {Menu} from 'antd';
 import menuList from '../../config/menu';
@@ -7,7 +7,7 @@ import memoryUtils from '../../utils/memoryUtils';
 import {connect} from 'react-redux';
 import {setHeadTitle} from '../../redux/actions';
 
-const {SubMenu} = Menu;
+const {SubMenu, Item} = Menu;
 
 function LeftNav(props) {
     const location = useLocation();
@@ -28,7 +28,9 @@ function LeftNav(props) {
     };
 
     const getMenuNodes = (menuList) => {
+
         const path = location.pathname;
+
         return menuList.map((item) => {
             if (hasAuth(item)) {
                 if (!item.children) {
@@ -36,7 +38,7 @@ function LeftNav(props) {
                         props.setHeadTitle(item.title);
                     }
                     return (
-                        <Menu.Item key={item.key} icon={item.icon}>
+                        <Item key={item.key} icon={item.icon}>
                             <Link
                                 to={item.key}
                                 onClick={() =>
@@ -45,15 +47,15 @@ function LeftNav(props) {
                             >
                                 {item.title}
                             </Link>
-                        </Menu.Item>
+                        </Item>
                     );
                 } else {
                     /* decide which tab is opened */
                     const cItem = item.children.find(
                         (cItem) =>
-                            location.pathname.indexOf(cItem.key) ===
-                            0
+                            cItem.key.startsWith(path)
                     );
+                    console.log(item.children, cItem)
                     if (cItem) {
                         setOpenKey([...openKey, item.key]);
                     }
@@ -79,7 +81,7 @@ function LeftNav(props) {
     if (path.indexOf('/product') === 0) {
         path = '/product';
     }
-
+    console.log({openKey})
     return (
         <div className="left-nav">
             {/* use location.pathname to set highlight  */}

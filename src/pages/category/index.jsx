@@ -30,9 +30,9 @@ export default class Category extends Component {
         const parentId = requireId || this.state.parentId
         return regetCategory(parentId).then(result => {
             if (result.status === 0) {
-                if (parentId === "0") 
+                if (parentId === "0")
                     this.setState({categoryNames: result.data})
-                 else 
+                else
                     this.setState({subCategoryNames: result.data})
 
             } else {
@@ -44,7 +44,7 @@ export default class Category extends Component {
 
 
     showSubcategories = (category) => {
-        const { name, _id} = category;
+        const {name, _id} = category;
         // const subCategoryNames = this.getCategoryNames()
         this.setState({
             parentName: name,
@@ -69,14 +69,14 @@ export default class Category extends Component {
                             Change
                         </LinkButton>
                         {
-                        this.state.parentId === "0" ? (
-                            <LinkButton onClick={
-                                () => this.showSubcategories(category)
-                            }>
-                                Details
-                            </LinkButton>
-                        ) : null
-                    } </span>
+                            this.state.parentId === "0" ? (
+                                <LinkButton onClick={
+                                    () => this.showSubcategories(category)
+                                }>
+                                    Details
+                                </LinkButton>
+                            ) : null
+                        } </span>
                 ),
                 dataIndex: 'operations',
                 key: 'operations'
@@ -93,6 +93,7 @@ export default class Category extends Component {
         this.getInitialColumnsNames()
 
     }
+
     componentDidMount() { /* get the first level of category */
         this.getCategoryNames()
 
@@ -105,10 +106,11 @@ export default class Category extends Component {
             const categoryName = values['categoryName']
             console.log("addCategory   ", parentId, categoryName)
             const result = await readdCategory(parentId, categoryName)
-            if (result.status === 0) 
+            if (result.status === 0)
                 this.getCategoryNames(parentId)
-            
-        }).catch(() => {})
+
+        }).catch(() => {
+        })
         // validate the inputtings
 
 
@@ -122,10 +124,11 @@ export default class Category extends Component {
             const categoryName = values['categoryName']
             console.log("categoryName", categoryName)
             const result = await reupdateCategory(cayegoryId, categoryName)
-            if (result.status === 0) 
+            if (result.status === 0)
                 this.getCategoryNames()
-            
-        }).catch(() => {}) // validate the inputtings
+
+        }).catch(() => {
+        }) // validate the inputtings
     }
 
     render() {
@@ -145,11 +148,11 @@ export default class Category extends Component {
             }>First level category</LinkButton><ArrowRightOutlined/> {parentName}</span>;
         const extra = (
             <Button type='primary'
-                onClick={
-                    () => {
-                        this.setState({showStatus: 1})
-                    }
-            }>
+                    onClick={
+                        () => {
+                            this.setState({showStatus: 1})
+                        }
+                    }>
                 <PlusOutlined/>
                 Add
             </Button>
@@ -159,66 +162,66 @@ export default class Category extends Component {
         return (
             <div>
                 <Modal title="Add"
-                    visible={
-                        showStatus === 1
-                    }
-                    onOk={
-                        this.addCategory
-                    }
-                    destroyOnClose={true}
+                       open={
+                           showStatus === 1
+                       }
+                       onOk={
+                           this.addCategory
+                       }
+                       destroyOnClose={true}
                     //  may be more costing
-                    onCancel={
-                        () => {
-                            this.setState({showStatus: 0})
-                        }
-                }>
+                       onCancel={
+                           () => {
+                               this.setState({showStatus: 0})
+                           }
+                       }>
                     <AddForm categoryNames={
-                            this.state.categoryNames
-                        }
-                        parentId={
-                            this.state.parentId
-                        }
-                        setForm={
-                            (form) => {
-                                this.form = form
-                            }
-                        }/>
-                </Modal>
-            <Modal title="Change"
-                visible={
-                    showStatus === 2
-                }
-                onOk={
-                    this.updateCategory
-                }
-                // destroyOnClose={true} may be more costing
-                onCancel={
-                    () => {
-                        this.setState({showStatus: 0})
+                        this.state.categoryNames
                     }
-            }>
-                <UpdateForm categoryName={
+                             parentId={
+                                 this.state.parentId
+                             }
+                             setForm={
+                                 (form) => {
+                                     this.form = form
+                                 }
+                             }/>
+                </Modal>
+                <Modal title="Change"
+                       open={
+                           showStatus === 2
+                       }
+                       onOk={
+                           this.updateCategory
+                       }
+                    // destroyOnClose={true} may be more costing
+                       onCancel={
+                           () => {
+                               this.setState({showStatus: 0})
+                           }
+                       }>
+                    <UpdateForm categoryName={
                         category.name
                     }
-                    setForm={
-                        (form) => {
-                            this.form = form
-                        }
-                    }/> {/*get the reference to the form*/} </Modal>
-            <Card title={title}
-                extra={extra}>
-                <Table dataSource={
+                                setForm={
+                                    (form) => {
+                                        this.form = form
+                                    }
+                                }/> {/*get the reference to the form*/} </Modal>
+                <Card title={title}
+                      extra={extra}>
+                    <Table dataSource={
                         parentId === "0" ? categoryNames : subCategoryNames
                     }
-                    columns={
-                        this.columns
-                    }
-                    loading={loading}
-                    bordered
-                    pagination={{defaultPageSize:5,showQuickJumper:true}}
-                    rowKey='_id'/>
-            </Card>
-        </div>
+                           columns={
+                               this.columns
+                           }
+                           loading={loading}
+                           bordered
+                           pagination={{defaultPageSize: 5, showQuickJumper: true}}
+                           rowKey='_id'/>
+                </Card>
+            </div>
         );
     }
 }

@@ -53,7 +53,7 @@ export default class AddForm extends Component {
                               message: "must be longer than 1!"
                           }, {
                               max: 12,
-                              message: "Ymust be shorter than 12!"
+                              message: "must be shorter than 12!"
                           },
                           ]
                       }>

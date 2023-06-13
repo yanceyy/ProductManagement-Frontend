@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Card, Button, Table, message, Modal } from 'antd';
-import { PAGE_SIZE } from '../../utils/constants';
-import { regetRoleList, reCreateRole, reupdateRole } from '../../api/action';
+import React, {Component} from 'react';
+import {Card, Button, Table, message, Modal} from 'antd';
+import {PAGE_SIZE} from '../../utils/constants';
+import {regetRoleList, reCreateRole, reupdateRole} from '../../api/action';
 import AddForm from './add-form';
 import AuthForm from './auth-form';
-import { formateDate } from '../../utils/dateUtils';
+import {formateDate} from '../../utils/dateUtils';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 
@@ -26,7 +26,7 @@ export default class Role extends Component {
         const data = await regetRoleList();
         if (data.status === 0) {
             const roles = data.data;
-            this.setState({ roles });
+            this.setState({roles});
         } else {
             message.error("couldn't get require data from server");
         }
@@ -61,7 +61,7 @@ export default class Role extends Component {
     onRow = (role) => {
         return {
             onClick: () => {
-                this.setState({ role });
+                this.setState({role});
             },
         };
     };
@@ -72,7 +72,7 @@ export default class Role extends Component {
         this.form
             .validateFields()
             .then(async (values) => {
-                this.setState({ showStatus: 0 });
+                this.setState({showStatus: 0});
                 console.log(values);
                 const result = await reCreateRole(values['RoleName']);
                 if (result.status === 0) {
@@ -81,12 +81,13 @@ export default class Role extends Component {
                     this.getTableData();
                 } else message.error('add failed');
             })
-            .catch(() => {});
+            .catch(() => {
+            });
     };
 
     updateRole = async () => {
         // similar to add category
-        const { role } = this.authFrom.current.state;
+        const {role} = this.authFrom.current.state;
         console.log(role);
         role.auth_name = memoryUtils.user.username;
         const result = await reupdateRole(role);
@@ -100,8 +101,8 @@ export default class Role extends Component {
                 message.success('role changes please relogin');
             } else {
                 message.success('add successfully');
-                this.setState({ role }); // update the outdate role state
-                this.setState({ showStatus: 0 });
+                this.setState({role}); // update the outdate role state
+                this.setState({showStatus: 0});
                 this.getTableData(); // update loaded data
             }
         } else message.error('add failed');
@@ -116,19 +117,19 @@ export default class Role extends Component {
     }
 
     render() {
-        const { roles, loading, role, showStatus } = this.state;
+        const {roles, loading, role, showStatus} = this.state;
         const name = (
             <span>
                 <Button
                     type="primary"
-                    onClick={() => this.setState({ showStatus: 1 })}
+                    onClick={() => this.setState({showStatus: 1})}
                 >
                     Create roles
                 </Button>
                 &nbsp;
                 <Button
                     type="primary"
-                    onClick={() => this.setState({ showStatus: 2 })}
+                    onClick={() => this.setState({showStatus: 2})}
                     disabled={!role._id}
                 >
                     Authority Settings
@@ -139,10 +140,10 @@ export default class Role extends Component {
             <Card title={name}>
                 <Modal
                     title="Create Role"
-                    visible={showStatus === 1}
+                    open={showStatus === 1}
                     onOk={this.addRole}
                     onCancel={() => {
-                        this.setState({ showStatus: 0 });
+                        this.setState({showStatus: 0});
                         this.form.resetFields(); // clear input field
                     }}
                 >
@@ -155,10 +156,10 @@ export default class Role extends Component {
                 <Modal
                     title="Update Role"
                     destroyOnClose={true}
-                    visible={showStatus === 2}
+                    open={showStatus === 2}
                     onOk={this.updateRole}
                     onCancel={() => {
-                        this.setState({ showStatus: 0 });
+                        this.setState({showStatus: 0});
                     }}
                 >
                     <AuthForm
@@ -184,7 +185,7 @@ export default class Role extends Component {
                     columns={this.columns}
                     loading={loading}
                     bordered
-                    pagination={{ defaultPageSize: PAGE_SIZE }}
+                    pagination={{defaultPageSize: PAGE_SIZE}}
                     rowKey="_id"
                 />
             </Card>

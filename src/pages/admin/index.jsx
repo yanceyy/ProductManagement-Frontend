@@ -24,12 +24,24 @@ const Admin = () => {
     }
 
     return (
-        <Layout style={{minHeight: '100vh'}}>
-            <Sider width="250px">
+        <Layout hasSider style={{minHeight: '100vh'}}>
+            <Sider width="250px" style={{
+                overflow: 'auto',
+                height: '100vh',
+                position: 'fixed',
+                left: 0,
+                top: 0,
+                bottom: 0,
+            }}>
                 <LeftNav/>
             </Sider>
-            <Layout>
-                <Header className="header">
+            <Layout style={{marginLeft: 250}}>
+                <Header className="header" style={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                    width: '100%',
+                }}>
                     <HeaderCom/>
                 </Header>
                 <Content className="content-body">

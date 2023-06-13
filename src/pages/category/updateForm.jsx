@@ -29,7 +29,7 @@ export default class UpdateForm extends Component {
                   initialValues={
                       {categoryName: categoryName}
                   }>
-                <Item name="categoryName" shouldUpdat
+                <Item name="categoryName" shouldUpdate
                       rules={
                           [
                               {
@@ -40,7 +40,7 @@ export default class UpdateForm extends Component {
                               message: "must be longer than 1!"
                           }, {
                               max: 12,
-                              message: "Ymust be shorter than 12!"
+                              message: "must be shorter than 12!"
                           },
                           ]
                       }>

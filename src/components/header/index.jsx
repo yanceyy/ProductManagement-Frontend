@@ -32,7 +32,7 @@ function HeaderCom({headTitle}) {
         <div className="header">
             <Modal
                 title="Conform"
-                visible={logoutIsVisable}
+                open={logoutIsVisable}
                 onOk={logout}
                 onCancel={handleCancel}
             >
