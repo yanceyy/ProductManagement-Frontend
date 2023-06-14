@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './login.less';
 import { login } from '../../api/action';
 import { Form, Input, Button, Checkbox, message } from 'antd';
@@ -6,7 +6,6 @@ import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
 import { Redirect, useHistory } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import animationData from '../../images/homePage.json';
 
 /*
 router component for login page
@@ -14,6 +13,13 @@ router component for login page
 function Login() {
     const [user, setUser] = useState(memoryUtils.user);
     const history = useHistory();
+    const [animationData, setAnimationData] = useState(undefined);
+
+    useEffect(() => {
+        import('../../images/homePage.json').then((data) => {
+            setAnimationData(data.default);
+        });
+    }, []);
 
     const onFinish = async (values) => {
         const data = await login(values.username, values.password);

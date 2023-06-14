@@ -1,17 +1,20 @@
 import { Redirect, Switch, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Loading } from '../../components/common/Loading';
 import memoryUtils from '../../utils/memoryUtils';
 import { Layout } from 'antd';
 import './index.less';
 import HeaderCom from '../../components/header';
 import LeftNav from '../../components/left-nav';
-import Home from '../home';
-import Category from '../category';
-import Role from '../role';
-import Bar from '../chart/bar';
-import Line from '../chart/line';
-import Pie from '../chart/pie';
-import Product from '../product';
-import User from '../user';
+
+const Role = lazy(() => import('../role'));
+const User = lazy(() => import('../user'));
+const Home = lazy(() => import('../home'));
+const Product = lazy(() => import('../product'));
+const Pie = lazy(() => import('../chart/pie'));
+const Category = lazy(() => import('../category'));
+const Bar = lazy(() => import('../chart/bar'));
+const Line = lazy(() => import('../chart/line'));
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -49,17 +52,22 @@ const Admin = () => {
                     <HeaderCom />
                 </Header>
                 <Content className="content-body">
-                    <Switch>
-                        <Route path="/category" component={Category}></Route>
-                        <Route path="/role" component={Role}></Route>
-                        <Route path="/user" component={User}></Route>
-                        <Route path="/chart/bar" component={Bar}></Route>
-                        <Route path="/chart/line" component={Line}></Route>
-                        <Route path="/chart/pie" component={Pie}></Route>
-                        <Route path="/product" component={Product}></Route>
-                        <Route path="/home" component={Home}></Route>
-                        <Redirect to="/home" />
-                    </Switch>
+                    <Suspense fallback={<Loading />}>
+                        <Switch>
+                            <Route
+                                path="/category"
+                                component={Category}
+                            ></Route>
+                            <Route path="/role" component={Role}></Route>
+                            <Route path="/user" component={User}></Route>
+                            <Route path="/chart/bar" component={Bar}></Route>
+                            <Route path="/chart/line" component={Line}></Route>
+                            <Route path="/chart/pie" component={Pie}></Route>
+                            <Route path="/product" component={Product}></Route>
+                            <Route path="/home" component={Home}></Route>
+                            <Redirect to="/home" />
+                        </Switch>
+                    </Suspense>
                 </Content>
                 <Footer className="footer">
                     <p>07-2021</p>

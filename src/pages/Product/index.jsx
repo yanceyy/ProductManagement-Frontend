@@ -1,7 +1,9 @@
 import { Switch, Route, Redirect } from 'react-router-dom';
-import ProductAddUpdate from './add-update';
-import ProductHome from './home';
-import ProductPage from './product';
+import { lazy } from 'react';
+
+const ProductAddUpdate = lazy(() => import('./add-update'));
+const ProductHome = lazy(() => import('./home'));
+const ProductPage = lazy(() => import('./product'));
 
 export default function Product() {
     return (
