@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {
     Card,
     Button,
@@ -6,200 +6,173 @@ import {
     message,
     Modal
 } from 'antd';
+
 import {PlusOutlined, ArrowRightOutlined} from "@ant-design/icons";
 import LinkButton from '../../components/link-button';
 import {regetCategory, readdCategory, reupdateCategory} from "../../api/action";
 import AddForm from './addForm';
 import UpdateForm from './updateForm';
 
-export default class Category extends Component {
+export default function Category(){
+    const [categoryNames, setCategoryNames] = useState([]);
+    const [subCategoryNames, setSubCategoryNames] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [parentId, setParentId] = useState("0");
+    const [parentName, setParentName] = useState("First level category");
+    const [showStatus, setShowStatus] = useState(0);
+    const [category, setCategory] = useState({});
 
-    state = {
-        categoryNames: [],
-        subCategoryNames: [],
-        loading: false,
-        parentId: "0", /* current showing category */
-        parentName: "First level category", /* parent name of current showing category */
-        showStatus: 0, /* */
-    }
-
+    const form = useRef();
 
     /* use axios to get all the rows data from server */
-    getCategoryNames = (requireId) => {
-        this.setState({loading: true})
-        const parentId = requireId || this.state.parentId
+    const getCategoryNames = (requireId) => {
+        setLoading(true)
+        const _parentId = requireId||parentId;
         return regetCategory(parentId).then(result => {
             if (result.status === 0) {
-                if (parentId === "0")
-                    this.setState({categoryNames: result.data})
-                else
-                    this.setState({subCategoryNames: result.data})
-
+                if (_parentId === "0") setCategoryNames(result.data);
+                else setSubCategoryNames(result.data);
             } else {
                 message.error("Failed to get category data from server")
             }
-            this.setState({loading: false})
+            setLoading(false);
         })
     }
 
 
-    showSubcategories = (category) => {
+    const showSubcategories = (category) => {
         const {name, _id} = category;
-        // const subCategoryNames = this.getCategoryNames()
-        this.setState({
-            parentName: name,
-            parentId: _id
-        }, this.getCategoryNames)
+        setParentName(name);
+        setParentId(_id);
     }
+
+
+    const showUpdate = (category) => {
+        setCategory(category);
+        setShowStatus(2)
+    }
+
     /* initial get the column names */
-    getInitialColumnsNames = () => {
-        this.columns = [
+    const columns = [
             {
                 title: 'Category Name',
                 dataIndex: 'name',
                 key: 'name'
-            }, {
+            },
+            {
                 title: 'Operations',
                 width: 300, /* set the column width */
-                render: (_, category) => (
+                render: function OperationsRowRender(_, category){
+                    return (
                     <span>
                         <LinkButton onClick={
-                            () => this.showUpdate(category)
+                            () => showUpdate(category)
                         }>
                             Change
                         </LinkButton>
                         {
-                            this.state.parentId === "0" ? (
+                            parentId === "0" ? (
                                 <LinkButton onClick={
-                                    () => this.showSubcategories(category)
+                                    () => showSubcategories(category)
                                 }>
                                     Details
                                 </LinkButton>
                             ) : null
                         } </span>
-                ),
+                )},
                 dataIndex: 'operations',
                 key: 'operations'
             },
         ];
-    }
 
-    showUpdate = (category) => {
-        this.category = category
-        this.setState({showStatus: 2})
-    }
+    // fetch data when current parentId changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {getCategoryNames()}, [parentId]);
 
-    UNSAFE_componentWillMount() {
-        this.getInitialColumnsNames()
-
-    }
-
-    componentDidMount() { /* get the first level of category */
-        this.getCategoryNames()
-
-    }
-
-    addCategory = async () => {
-        this.form.validateFields().then(async values => {
-            this.setState({showStatus: 0})
+    const addCategory = async () => {
+        form.current.validateFields().then(async values => {
+            setShowStatus(0)
             const parentId = values['parentId']
             const categoryName = values['categoryName']
-            console.log("addCategory   ", parentId, categoryName)
             const result = await readdCategory(parentId, categoryName)
             if (result.status === 0)
-                this.getCategoryNames(parentId)
+                getCategoryNames(parentId)
 
         }).catch(() => {
         })
     }
 
-    updateCategory = () => {
-        this.form.validateFields().then(async values => {
-            this.setState({showStatus: 0}) // hide the dialogue
-            const cayegoryId = this.category._id
+    const updateCategory = () => {
+        form.current.validateFields().then(async values => {
+            setShowStatus(0) // hide the dialogue
+            const cayegoryId = category._id
             const categoryName = values['categoryName']
-            console.log("categoryName", categoryName)
             const result = await reupdateCategory(cayegoryId, categoryName)
             if (result.status === 0)
-                this.getCategoryNames()
+                getCategoryNames()
 
         }).catch(() => {
         }) // validate the inputtings
     }
 
-    render() {
-        const {
-            loading,
-            categoryNames,
-            subCategoryNames,
-            parentId,
-            parentName,
-            showStatus
-        } = this.state;
-
-        /* */
-        const title = parentId === "0" ? <span>First level category</span> : <span>
+    const title = parentId === "0" ? <span>First level category</span> : <span>
             <LinkButton onClick={
-                () => this.setState({parentId: "0", parentName: "", subCategoryNames: []})
+                ()=>{
+                    setParentId("0");
+                    setParentName("");
+                    setSubCategoryNames([]);
+                }
             }>First level category</LinkButton><ArrowRightOutlined/> {parentName}</span>;
-        const extra = (
-            <Button type='primary'
+    const extra = (
+        <Button type='primary'
                     onClick={
                         () => {
-                            this.setState({showStatus: 1})
+                            setShowStatus(1)
                         }
                     }>
                 <PlusOutlined/>
                 Add
-            </Button>
+        </Button>
         )
-        const category = this.category || {}
 
-        return (
-            <div>
+    return (
+            <>
                 <Modal title="Add"
                        open={
                            showStatus === 1
                        }
                        onOk={
-                           this.addCategory
+                           addCategory
                        }
                        destroyOnClose={true}
                     //  may be more costing
                        onCancel={
                            () => {
-                               this.setState({showStatus: 0})
+                               setShowStatus(0)
                            }
                        }>
-                    <AddForm categoryNames={
-                        this.state.categoryNames
-                    }
-                             parentId={
-                                 this.state.parentId
-                             }
+                    <AddForm categoryNames={categoryNames}
+                             parentId={parentId}
                              setForm={
-                                 (form) => {
-                                     this.form = form
-                                 }
+                                (_form) => {
+                                    form.current = _form;
+                                }
                              }/>
                 </Modal>
                 <Modal title="Change"
                        open={
                            showStatus === 2
                        }
-                       onOk={
-                           this.updateCategory
-                       }
-                    // destroyOnClose={true} may be more costing
+                       onOk={updateCategory}
                        onCancel={
                            () => {
-                               this.setState({showStatus: 0})
+                               setShowStatus(0);
                            }
                        }>
                     <UpdateForm categoryName={category.name}
                                 setForm={
-                                    (form) => {
-                                        this.form = form
+                                    (_form) => {
+                                        form.current = _form;
                                     }
                                 }/>
                 </Modal>
@@ -208,15 +181,12 @@ export default class Category extends Component {
                     <Table dataSource={
                         parentId === "0" ? categoryNames : subCategoryNames
                     }
-                           columns={
-                               this.columns
-                           }
+                           columns={columns}
                            loading={loading}
                            bordered
-                           pagination={{defaultPageSize: 5, showQuickJumper: true}}
+                           pagination={{defaultPageSize: 15, showQuickJumper: true}}
                            rowKey='_id'/>
                 </Card>
-            </div>
+            </>
         );
-    }
 }

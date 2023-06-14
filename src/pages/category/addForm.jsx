@@ -1,23 +1,18 @@
-import React, {Component} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {Select, Form, Input} from 'antd'
 
 const Item = Form.Item
 const Option = Select.Option
 
-export default class AddForm extends Component {
-    formRef = React.createRef();
+export default function AddForm ({setForm, parentId, categoryNames}) {
+    const formRef = useRef();
 
-    componentDidMount() {
-        this.props.setForm(this.formRef.current)
-    }
+    useEffect(() => {
+        setForm(formRef.current)
+    },[setForm]);
 
-    render() {
-        const {categoryNames, parentId} = this.props
-        console.log(parentId)
-        return (
-            <Form ref={
-                this.formRef
-            }
+    return (
+            <Form ref={formRef}
                   initialValues={
                       {parentId}
                   }>
@@ -56,11 +51,9 @@ export default class AddForm extends Component {
                               message: "must be shorter than 12!"
                           },
                           ]
-                      }>
-                    <Input placeholder="Category name"></Input>
-                </Item>
-
-            </Form>
-        )
-    }
+                    }>
+                <Input placeholder="Category name"></Input>
+            </Item>
+        </Form>
+    )
 }
