@@ -64,7 +64,7 @@ export default function ProductHome() {
             dataIndex: 'name',
         },
         {
-            width: '60%',
+            width: '50%',
             title: 'Description',
             dataIndex: 'desc',
         },
@@ -79,30 +79,14 @@ export default function ProductHome() {
         {
             title: 'Status',
             render: function ListAction(product) {
-                const { status, _id } = product;
-                const newStatus = status ? 0 : 1;
-                return (
-                    <span>
-                        <Button
-                            type="primary"
-                            style={{
-                                width: '100px',
-                                margin: '0 auto 5px',
-                            }}
-                            onClick={() => updateStatus(_id, newStatus)}
-                        >
-                            {status === 1 ? 'Unlisted' : 'Relisted'}
-                        </Button>
-                        <div style={{ textAlign: 'center' }}>
-                            {status === 1 ? 'Listed' : 'Unlisted'}
-                        </div>
-                    </span>
-                );
+                const { status } = product;
+                return <span>{status === 1 ? 'Listed' : 'Unlisted'}</span>;
             },
         },
         {
             title: 'Operations',
             render: function EditAction(product) {
+                const { status, _id } = product;
                 return (
                     <span>
                         <LinkButton
@@ -118,6 +102,14 @@ export default function ProductHome() {
                             }
                         >
                             Details
+                        </LinkButton>
+                        <LinkButton
+                            onClick={() => {
+                                const newStatus = status ? 0 : 1;
+                                updateStatus(_id, newStatus);
+                            }}
+                        >
+                            {status === 1 ? 'Unlisted' : 'Relisted'}
                         </LinkButton>
                     </span>
                 );

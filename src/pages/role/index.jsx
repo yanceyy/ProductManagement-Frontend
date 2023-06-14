@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Card, Button, Table, message, Modal } from 'antd';
+import { Card, Button, Table, message, Modal, Tooltip } from 'antd';
 import { PAGE_SIZE } from '../../utils/constants';
 import { reGetRoleList, reCreateRole, reUpdateRole } from '../../api/action';
 import AddForm from './add-form';
@@ -111,13 +111,18 @@ export default function Role() {
                 Create roles
             </Button>
             &nbsp;
-            <Button
-                type="primary"
-                onClick={() => setShowStatus(2)}
-                disabled={!role._id}
+            <Tooltip
+                trigger={role._id ? '' : 'hover'}
+                title="Please click row to select the role you want to change"
             >
-                Authority Settings
-            </Button>
+                <Button
+                    type="primary"
+                    onClick={() => setShowStatus(2)}
+                    disabled={!role._id}
+                >
+                    Authority Settings
+                </Button>
+            </Tooltip>
         </span>
     );
     return (

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Card, Button, Table, Modal, message } from 'antd';
+import { Card, Button, Table, Modal, message, Popconfirm } from 'antd';
 import { PAGE_SIZE } from '../../utils/constants';
 
 import {
@@ -109,13 +109,17 @@ export default function User() {
                         >
                             Edit
                         </LinkButton>
-                        <LinkButton
-                            onClick={() => {
+                        <Popconfirm
+                            title="Delete the user"
+                            description="Are you sure to delete this user?"
+                            onConfirm={() => {
                                 deleteUser(user);
                             }}
+                            okText="Yes"
+                            cancelText="No"
                         >
-                            Delete
-                        </LinkButton>
+                            <LinkButton>Delete</LinkButton>
+                        </Popconfirm>
                     </span>
                 );
             },
