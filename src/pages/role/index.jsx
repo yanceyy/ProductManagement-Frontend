@@ -1,155 +1,142 @@
-import React, {Component} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Card, Button, Table, message, Modal} from 'antd';
 import {PAGE_SIZE} from '../../utils/constants';
-import {regetRoleList, reCreateRole, reupdateRole} from '../../api/action';
+import {regetRoleList as reGetRoleList, reCreateRole, reupdateRole as reUpdateRole} from '../../api/action';
 import AddForm from './add-form';
 import AuthForm from './auth-form';
+import {useHistory} from 'react-router-dom';
 import {formateDate} from '../../utils/dateUtils';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 
-export default class Role extends Component {
-    state = {
-        roles: [],
-        role: {},
-        loading: false,
-        showStatus: 0,
-    };
+const columns = [
+    {
+        title: 'name',
+        dataIndex: 'name',
+    },
+    {
+        title: 'create time',
+        dataIndex: 'create_time',
+        render: formateDate,
+    },
+    {
+        title: 'authority time',
+        dataIndex: 'auth_time',
+        render: formateDate,
+    },
+    {
+        title: 'authority person',
+        dataIndex: 'auth_name',
+    },
+];
 
-    constructor(props) {
-        super(props);
-        this.authFrom = React.createRef();
-    }
+export default function Role(){
+    const [roles, setRoles] = useState([]);
+    const [role, setRole] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [showStatus, setShowStatus] = useState(0);
+    const history = useHistory();
+    const form = useRef();
 
     // get tabel data from server
-    getTableData = async () => {
-        const data = await regetRoleList();
+    const getTableData = async () => {
+        setIsLoading(true);
+        try{
+        const data = await reGetRoleList();
         if (data.status === 0) {
             const roles = data.data;
-            this.setState({roles});
+            setRoles(roles);
         } else {
             message.error("couldn't get require data from server");
         }
-    };
-
-    // initial column name
-
-    initColumn = () => {
-        this.columns = [
-            {
-                title: 'name',
-                dataIndex: 'name',
-            },
-            {
-                title: 'create time',
-                dataIndex: 'create_time',
-                render: formateDate,
-            },
-            {
-                title: 'authority time',
-                dataIndex: 'auth_time',
-                render: formateDate,
-            },
-            {
-                title: 'authority person',
-                dataIndex: 'auth_name',
-            },
-        ];
+        }finally {
+            setIsLoading(false);
+        }
     };
 
     // set click event on table
-    onRow = (role) => {
+    const onRow = (role) => {
         return {
             onClick: () => {
-                this.setState({role});
+                setRole(role);
             },
         };
     };
 
     // add role
-    addRole = () => {
+    const addRole = () => {
         // similar to add category
-        this.form
-            .validateFields()
+        form.current.validateFields()
             .then(async (values) => {
-                this.setState({showStatus: 0});
-                console.log(values);
                 const result = await reCreateRole(values['RoleName']);
                 if (result.status === 0) {
-                    this.form.resetFields(); // clear input field
+                    form.current.resetFields(); // clear input field
                     message.success('add successfully');
-                    this.getTableData();
+                    getTableData();
+                    setShowStatus(0);
                 } else message.error('add failed');
             })
             .catch(() => {
             });
     };
 
-    updateRole = async () => {
+    const updateRole = async () => {
         // similar to add category
-        const {role} = this.authFrom.current.state;
-        console.log(role);
         role.auth_name = memoryUtils.user.username;
-        const result = await reupdateRole(role);
+        const result = await reUpdateRole(role);
         if (result.status === 0) {
             // if the user current change the property of self,
             // then require to relogin
             if (memoryUtils.user.role_id === role._id) {
                 storageUtils.removeUser();
                 memoryUtils.user = {};
-                this.props.history.replace('/login');
+                history.replace('/login');
                 message.success('role changes please relogin');
             } else {
                 message.success('add successfully');
-                this.setState({role}); // update the outdate role state
-                this.setState({showStatus: 0});
-                this.getTableData(); // update loaded data
+                setRole(role); // update the outdate role state
+                setShowStatus(0);
+                getTableData(); // update loaded data
             }
         } else message.error('add failed');
     };
 
-    UNSAFE_componentWillMount() {
-        this.initColumn();
-    }
+    useEffect(() => {
+        getTableData();
+    },[]);
 
-    componentDidMount() {
-        this.getTableData();
-    }
-
-    render() {
-        const {roles, loading, role, showStatus} = this.state;
-        const name = (
-            <span>
-                <Button
-                    type="primary"
-                    onClick={() => this.setState({showStatus: 1})}
-                >
-                    Create roles
-                </Button>
-                &nbsp;
-                <Button
-                    type="primary"
-                    onClick={() => this.setState({showStatus: 2})}
-                    disabled={!role._id}
-                >
-                    Authority Settings
-                </Button>
-            </span>
-        );
+    const name = (
+        <span>
+            <Button
+                type="primary"
+                onClick={() => setShowStatus(1)}
+            >
+                Create roles
+            </Button>
+            &nbsp;
+            <Button
+                type="primary"
+                onClick={() => setShowStatus(2)}
+                disabled={!role._id}
+            >
+                Authority Settings
+            </Button>
+        </span>
+    );
         return (
             <Card title={name}>
                 <Modal
                     title="Create Role"
                     open={showStatus === 1}
-                    onOk={this.addRole}
+                    onOk={addRole}
                     onCancel={() => {
-                        this.setState({showStatus: 0});
-                        this.form.resetFields(); // clear input field
+                        setShowStatus(0);
+                        form.current.resetFields(); // clear input field
                     }}
                 >
                     <AddForm
-                        setForm={(form) => {
-                            this.form = form;
+                        setForm={(_form) => {
+                            form.current = _form;
                         }}
                     />
                 </Modal>
@@ -157,38 +144,30 @@ export default class Role extends Component {
                     title="Update Role"
                     destroyOnClose={true}
                     open={showStatus === 2}
-                    onOk={this.updateRole}
+                    onOk={updateRole}
                     onCancel={() => {
-                        this.setState({showStatus: 0});
+                        setShowStatus(0);
                     }}
                 >
                     <AuthForm
-                        ref={this.authFrom}
-                        setForm={(form) => {
-                            this.form = form;
-                        }}
+                        setRole={setRole}
                         role={role}
                     />
                 </Modal>
                 <Table
                     dataSource={roles}
-                    onRow={this.onRow}
+                    onRow={onRow}
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: [role._id],
-                        onSelect: (role) => {
-                            this.setState({
-                                role,
-                            });
-                        },
+                        onSelect:setRole,
                     }}
-                    columns={this.columns}
-                    loading={loading}
+                    columns={columns}
+                    loading={isLoading}
                     bordered
                     pagination={{defaultPageSize: PAGE_SIZE}}
                     rowKey="_id"
                 />
             </Card>
-        );
-    }
+    );
 }

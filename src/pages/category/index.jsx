@@ -111,10 +111,6 @@ export default class Category extends Component {
 
         }).catch(() => {
         })
-        // validate the inputtings
-
-
-        // only update the required page
     }
 
     updateCategory = () => {

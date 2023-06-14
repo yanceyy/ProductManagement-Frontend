@@ -1,42 +1,20 @@
-import React, {Component} from 'react';
 import {Tree, Input} from 'antd';
 import menuList from '../../config/menu';
 
-export default class AuthForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {role: props.role};
-
-        console.log('construction');
-    }
-
-    formRef = React.createRef();
-
-    componentDidMount() {
-        this.props.setForm(this.formRef.current);
-    }
-
-    onCheck = (checkedKeys) => {
-        const role = {...this.state.role};
-        role.menus = checkedKeys;
-        this.setState({role});
+export default function AuthForm({role, setRole})  {
+    const onCheck = (checkedKeys) => {
+        setRole({...role, menus:checkedKeys});
     };
 
-    render() {
-        const {role} = this.state;
-        return (
-            <>
-                <Input value={role.name} disabled></Input>
-                <Tree
-                    checkable
-                    defaultExpandAll
-                    onCheck={this.onCheck}
-                    // onSelect={onSelect}
-                    // onCheck={onCheck}
-                    defaultCheckedKeys={role.menus}
-                    treeData={menuList}
-                />
-            </>
-        );
-    }
+    return (
+        <>
+            <Input value={role.name} disabled></Input>
+            <Tree
+                checkable
+                defaultExpandAll
+                onCheck={onCheck}
+                checkedKeys={role.menus}
+                treeData={menuList}
+            />
+        </>);
 }
