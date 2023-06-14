@@ -8,66 +8,69 @@ import {
     AreaChartOutlined,
     BarChartOutlined,
     LineChartOutlined,
-    PieChartOutlined
+    PieChartOutlined,
 } from '@ant-design/icons';
 
 const menuList = [
     {
         title: 'Home', // menu title
         key: '/home', // path
-        icon: <HomeOutlined/>, // icon name
+        icon: <HomeOutlined />, // icon name
         isPublic: true, // public
     },
     {
         title: 'Produces',
         key: '/products',
-        icon: <AppstoreOutlined/>,
+        icon: <AppstoreOutlined />,
         children: [
-            { // children menu
+            {
+                // children menu
                 title: 'Manage category',
                 key: '/category',
-                icon: <BarsOutlined/>
-            }, {
+                icon: <BarsOutlined />,
+            },
+            {
                 title: 'Manage products',
                 key: '/product',
-                icon: <ToolOutlined/>
+                icon: <ToolOutlined />,
             },
-        ]
+        ],
     },
 
     {
         title: 'Manage users',
         key: '/user',
-        icon: <UserOutlined/>
+        icon: <UserOutlined />,
     },
     {
         title: 'Manage roles',
         key: '/role',
-        icon: <SafetyCertificateOutlined/>
-    }, {
+        icon: <SafetyCertificateOutlined />,
+    },
+    {
         title: 'Charts',
         key: '/chart',
-        icon: <AreaChartOutlined/>,
+        icon: <AreaChartOutlined />,
         children: [
             {
                 title: 'Bar',
                 key: '/chart/bar',
-                icon: <BarChartOutlined/>
-            }, {
+                icon: <BarChartOutlined />,
+            },
+            {
                 title: 'Line',
                 key: '/chart/line',
-                icon: <LineChartOutlined/>
-            }, {
+                icon: <LineChartOutlined />,
+            },
+            {
                 title: 'Pie',
                 key: '/chart/pie',
-                icon: <PieChartOutlined/>
+                icon: <PieChartOutlined />,
             },
-        ]
+        ],
     },
-]
+];
 
-const KeyToTitle = () => {
+const KeyToTitle = () => {};
 
-}
-
-export default menuList
+export default menuList;

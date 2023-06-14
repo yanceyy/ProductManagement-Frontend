@@ -1,10 +1,10 @@
-import {useState, useEffect} from 'react';
-import {Card, Select, Input, Button, Table, message} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
-import {useHistory} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Card, Select, Input, Button, Table, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 import LinkButton from '../../components/link-button';
-import {regetList, researchProducts, reupdateStatus} from '../../api/action';
-import {PAGE_SIZE} from '../../utils/constants';
+import { regetList, researchProducts, reupdateStatus } from '../../api/action';
+import { PAGE_SIZE } from '../../utils/constants';
 
 export default function ProductHome() {
     const [loading, setLoading] = useState(false);
@@ -29,16 +29,16 @@ export default function ProductHome() {
             researchProducts(pageNum, PAGE_SIZE, searchName, searchType).then(
                 (result) => {
                     if (result.status === 0) {
-                        const {list, total} = result.data;
+                        const { list, total } = result.data;
                         setProducts(list);
                         setTotal(total);
                     }
-                }
+                },
             );
         } else {
             regetList(pageNum, PAGE_SIZE).then((result) => {
                 if (result.status === 0) {
-                    const {list, total} = result.data;
+                    const { list, total } = result.data;
                     setProducts(list);
                     setTotal(total);
                 }
@@ -74,12 +74,12 @@ export default function ProductHome() {
             render: (price) => {
                 return 'AU$' + price;
             },
-            sorter: (a, b) => a.price - b.price
+            sorter: (a, b) => a.price - b.price,
         },
         {
             title: 'Status',
             render: function ListAction(product) {
-                const {status, _id} = product;
+                const { status, _id } = product;
                 const newStatus = status ? 0 : 1;
                 return (
                     <span>
@@ -93,7 +93,7 @@ export default function ProductHome() {
                         >
                             {status === 1 ? 'Unlisted' : 'Relisted'}
                         </Button>
-                        <div style={{textAlign: 'center'}}>
+                        <div style={{ textAlign: 'center' }}>
                             {status === 1 ? 'Listed' : 'Unlisted'}
                         </div>
                     </span>
@@ -105,18 +105,22 @@ export default function ProductHome() {
             render: function EditAction(product) {
                 return (
                     <span>
-                    <LinkButton
-                        onClick={() => history.push('/product/add', product)}
-                    >
-                        Update
-                    </LinkButton>
-                    <LinkButton
-                        onClick={() => history.push('/product/info', {product})}
-                    >
-                        Details
-                    </LinkButton>
-                </span>
-                )
+                        <LinkButton
+                            onClick={() =>
+                                history.push('/product/add', product)
+                            }
+                        >
+                            Update
+                        </LinkButton>
+                        <LinkButton
+                            onClick={() =>
+                                history.push('/product/info', { product })
+                            }
+                        >
+                            Details
+                        </LinkButton>
+                    </span>
+                );
             },
         },
     ];
@@ -130,7 +134,7 @@ export default function ProductHome() {
             <Select
                 value={searchType}
                 onChange={(value) => setSearchType(value)}
-                style={{width: '150px'}}
+                style={{ width: '150px' }}
             >
                 <Select.Option value="productName">By name</Select.Option>
                 <Select.Option value="productDesc">
@@ -160,7 +164,7 @@ export default function ProductHome() {
                 history.push('/product/add');
             }}
         >
-            <PlusOutlined/>
+            <PlusOutlined />
             Add Product
         </Button>
     );
@@ -168,7 +172,7 @@ export default function ProductHome() {
     return (
         <Card title={title} extra={extra}>
             <Table
-                style={{height: "100%"}}
+                style={{ height: '100%' }}
                 bordered
                 columns={columns}
                 loading={loading}
@@ -181,7 +185,7 @@ export default function ProductHome() {
                     },
                     total,
                 }}
-                scroll={{y: 800}}
+                scroll={{ y: 800 }}
                 rowKey="_id"
                 dataSource={products}
             />

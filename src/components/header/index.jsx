@@ -1,19 +1,22 @@
-import {useState, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './index.less';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 import LinkButton from '../link-button';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-function HeaderCom({headTitle}) {
+function HeaderCom({ headTitle }) {
     const [logoutIsVisable, setLogoutIsVisable] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date().toString());
     const history = useHistory();
 
     useEffect(() => {
-        const timer = setInterval(() => setCurrentTime(new Date().toString()), 1000);
+        const timer = setInterval(
+            () => setCurrentTime(new Date().toString()),
+            1000,
+        );
         return () => clearInterval(timer);
     }, []);
 
@@ -49,9 +52,7 @@ function HeaderCom({headTitle}) {
                 </LinkButton>
             </div>
             <div className="header-bottom">
-                <div className="header-bottom-left">
-                    {headTitle}
-                </div>
+                <div className="header-bottom-left">{headTitle}</div>
 
                 <div className="header-bottom-right">
                     <span>{currentTime}</span>
@@ -61,6 +62,6 @@ function HeaderCom({headTitle}) {
     );
 }
 
-const mapStateToProps = (state) => ({headTitle: state.headTitle});
+const mapStateToProps = (state) => ({ headTitle: state.headTitle });
 
 export default connect(mapStateToProps)(HeaderCom);

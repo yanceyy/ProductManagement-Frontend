@@ -1,9 +1,9 @@
-import {useState, useEffect} from 'react';
-import {Card, List, Image} from 'antd';
-import {ArrowLeftOutlined} from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import { Card, List, Image } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import './product.less';
-import {IMAGE_UPLOAD_URL} from '../../utils/constants';
-import {regetCategoryById} from '../../api/action';
+import { IMAGE_UPLOAD_URL } from '../../utils/constants';
+import { regetCategoryById } from '../../api/action';
 
 /*
 component to show the detailed information about a product
@@ -14,7 +14,8 @@ const Item = List.Item;
 function ProductPage(props) {
     const [cName1, setCName1] = useState('');
     const [cName2, setCName2] = useState('');
-    const {pCategoryId, categoryId, name, desc, price, detail, imgs} = props.location.state.product;
+    const { pCategoryId, categoryId, name, desc, price, detail, imgs } =
+        props.location.state.product;
 
     useEffect(() => {
         const fetchCategoryNames = async () => {
@@ -29,7 +30,7 @@ function ProductPage(props) {
                 setCName1(categoryName.data.name);
                 setCName2(categoryName2.data.name);
             }
-        }
+        };
 
         fetchCategoryNames();
     }, [pCategoryId, categoryId]);
@@ -40,7 +41,7 @@ function ProductPage(props) {
                 onClick={() => props.history.replace('/product')}
                 className="detailgoback"
             />
-            <span style={{marginLeft: '5px'}}>details</span>
+            <span style={{ marginLeft: '5px' }}>details</span>
         </div>
     );
 
@@ -81,7 +82,7 @@ function ProductPage(props) {
                     <span className="left-col">Description:</span>
                     <span
                         className="right-col"
-                        dangerouslySetInnerHTML={{__html: detail}}
+                        dangerouslySetInnerHTML={{ __html: detail }}
                     ></span>
                 </Item>
             </List>

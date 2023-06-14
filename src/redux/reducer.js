@@ -1,24 +1,23 @@
-import storageUtils from '../utils/storageUtils'
-import {combineReducers} from "redux"
-import {SET_HEAD_TITLE} from "./action-types"
+import storageUtils from '../utils/storageUtils';
+import { combineReducers } from 'redux';
+import { SET_HEAD_TITLE } from './action-types';
 
-const initHeadTitle = "Home"
+const initHeadTitle = 'Home';
 function headTitle(state = initHeadTitle, action) {
     switch (action.type) {
         case SET_HEAD_TITLE:
-            return action.data
+            return action.data;
         default:
-            return state
+            return state;
     }
 }
 
-
-const initUser = storageUtils.getUser()
+const initUser = storageUtils.getUser();
 function user(state = initUser, action) {
     switch (action.type) {
         default:
-            return state
+            return state;
     }
 }
 
-export default combineReducers({headTitle, user})
+export default combineReducers({ headTitle, user });

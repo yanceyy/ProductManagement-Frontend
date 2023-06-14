@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import './login.less';
-import {login} from '../../api/action';
-import {Form, Input, Button, Checkbox, message} from 'antd';
+import { login } from '../../api/action';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
-import {Redirect, useHistory} from 'react-router-dom';
-import Lottie from "lottie-react";
+import { Redirect, useHistory } from 'react-router-dom';
+import Lottie from 'lottie-react';
 import animationData from '../../images/homePage.json';
 
 /*
@@ -29,16 +29,19 @@ function Login() {
     };
 
     if (user && user._id) {
-        return <Redirect to={"/"}/>
+        return <Redirect to={'/'} />;
     }
 
     return (
         <div className="login">
             <section className="login-section">
                 <section className="welcome-board">
-                    <Lottie style={{
-                        height: 300,
-                    }} animationData={animationData}/>
+                    <Lottie
+                        style={{
+                            height: 300,
+                        }}
+                        animationData={animationData}
+                    />
                 </section>
                 <section className="form">
                     <Form
@@ -53,7 +56,7 @@ function Login() {
                         <Form.Item
                             label="Username"
                             name="username"
-                            initialValue={"admin"}
+                            initialValue={'admin'}
                             rules={[
                                 {
                                     required: true,
@@ -76,13 +79,13 @@ function Login() {
                                 },
                             ]}
                         >
-                            <Input/>
+                            <Input />
                         </Form.Item>
 
                         <Form.Item
                             label="Password"
                             name="password"
-                            initialValue={"admin"}
+                            initialValue={'admin'}
                             rules={[
                                 {
                                     required: true,
@@ -110,15 +113,15 @@ function Login() {
                                 },
                             ]}
                         >
-                            <Input.Password/>
+                            <Input.Password />
                         </Form.Item>
 
                         <Form.Item
                             name="remember"
                             valuePropName="checked"
                             wrapperCol={{
-                                justify: "center",
-                                align: "middle"
+                                justify: 'center',
+                                align: 'middle',
                             }}
                         >
                             <Checkbox>Remember me</Checkbox>
@@ -126,14 +129,11 @@ function Login() {
 
                         <Form.Item
                             wrapperCol={{
-                                justify: "center",
-                                align: "middle"
+                                justify: 'center',
+                                align: 'middle',
                             }}
                         >
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                            >
+                            <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>

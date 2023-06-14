@@ -1,11 +1,11 @@
-import {useState, useRef, useEffect, useCallback, useMemo} from 'react';
-import {Button, Card, Cascader, Form, Input, message} from 'antd';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Button, Card, Cascader, Form, Input, message } from 'antd';
 import LinkButton from '../../components/link-button';
-import {ArrowLeftOutlined} from '@ant-design/icons';
-import {readdupdateProduct, regetCategory} from '../../api/action';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { readdupdateProduct, regetCategory } from '../../api/action';
 import PicturesWall from './pictures-wall';
 import RichTextEditor from './richTextEditor';
-import {useHistory} from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 /*
 component for adding and updating products
@@ -18,8 +18,8 @@ const formItemLayout = {
         span: 6,
     }, // set the length of wapper component
 };
-const {Item} = Form;
-const {TextArea} = Input;
+const { Item } = Form;
+const { TextArea } = Input;
 
 export default function ProductAddUpdate() {
     const history = useHistory();
@@ -27,15 +27,20 @@ export default function ProductAddUpdate() {
     const isUpdate = !!selectedProduct;
     const [options, setOptions] = useState([]);
     const formRef = useRef();
-    const [uploadedPicture, setUploadPictures] = useState(selectedProduct ? selectedProduct.imgs : []);
-    const [details, setDetails] = useState(selectedProduct ? selectedProduct.detail : "");
+    const [uploadedPicture, setUploadPictures] = useState(
+        selectedProduct ? selectedProduct.imgs : [],
+    );
+    const [details, setDetails] = useState(
+        selectedProduct ? selectedProduct.detail : '',
+    );
 
     const submit = useCallback(() => {
         // validate the form
         if (!formRef.current) return;
-        formRef.current.validateFields()
+        formRef.current
+            .validateFields()
             .then(async (values) => {
-                const {productName, productDetail, price, category} = values;
+                const { productName, productDetail, price, category } = values;
                 let categories;
                 // check the level of category
                 if (category.length === 2) {
@@ -72,7 +77,7 @@ export default function ProductAddUpdate() {
             })
             .catch((e) => {
                 console.error(e);
-                message.error('please complete the table')
+                message.error('please complete the table');
             });
     }, [details, history, uploadedPicture, selectedProduct]);
 
@@ -90,33 +95,36 @@ export default function ProductAddUpdate() {
     */
     const addOptions = useCallback((categories) => {
         return categories.map((c) => {
-            return {value: c._id, label: c.name, isLeaf: true};
+            return { value: c._id, label: c.name, isLeaf: true };
         });
     }, []);
 
     /*
     initl the options for the categories
     */
-    const initOptions = useCallback(async (categories) => {
-        const options = categories.map((item) => {
-            return {value: item._id, label: item.name, isLeaf: false};
-        });
-        /*
+    const initOptions = useCallback(
+        async (categories) => {
+            const options = categories.map((item) => {
+                return { value: item._id, label: item.name, isLeaf: false };
+            });
+            /*
         used when updating, since we need to get the subcategory data before set it as defalut values
         */
-        if (isUpdate) {
-            const {pCategoryId} = selectedProduct;
-            if (pCategoryId!=='0') {
-                const subcategories = await getCategoryArray(pCategoryId);
-                const categoryWithSubId = options.findIndex(
-                    (item) => item.value === pCategoryId
-                );
-                options[categoryWithSubId]['children'] =addOptions(subcategories);
+            if (isUpdate) {
+                const { pCategoryId } = selectedProduct;
+                if (pCategoryId !== '0') {
+                    const subcategories = await getCategoryArray(pCategoryId);
+                    const categoryWithSubId = options.findIndex(
+                        (item) => item.value === pCategoryId,
+                    );
+                    options[categoryWithSubId]['children'] =
+                        addOptions(subcategories);
+                }
             }
-        }
-        setOptions(options);
-    }, [addOptions, getCategoryArray, isUpdate, selectedProduct]);
-
+            setOptions(options);
+        },
+        [addOptions, getCategoryArray, isUpdate, selectedProduct],
+    );
 
     useEffect(() => {
         async function getOptions() {
@@ -125,39 +133,44 @@ export default function ProductAddUpdate() {
         }
 
         getOptions();
-    }, [getCategoryArray, initOptions])
-
+    }, [getCategoryArray, initOptions]);
 
     // dynamic load subcategory data from server
-    const loadData = useCallback(async (selectedOptions) => {
-        const targetOption = selectedOptions[selectedOptions.length - 1];
-        targetOption.loading = true;
-        const categories = await getCategoryArray(targetOption.value);
-        targetOption.children = addOptions(categories);
-        targetOption.loading = false;
-        setOptions([...options]);
-    }, [addOptions, getCategoryArray, options]);
+    const loadData = useCallback(
+        async (selectedOptions) => {
+            const targetOption = selectedOptions[selectedOptions.length - 1];
+            targetOption.loading = true;
+            const categories = await getCategoryArray(targetOption.value);
+            targetOption.children = addOptions(categories);
+            targetOption.loading = false;
+            setOptions([...options]);
+        },
+        [addOptions, getCategoryArray, options],
+    );
 
-    const {categoryIds} = useMemo(() => {
+    const { categoryIds } = useMemo(() => {
         const categoryIds = [];
         if (isUpdate) {
-            const {pCategoryId, categoryId} = selectedProduct;
-            if (pCategoryId === "0") categoryIds.push(categoryId);
+            const { pCategoryId, categoryId } = selectedProduct;
+            if (pCategoryId === '0') categoryIds.push(categoryId);
             else {
                 categoryIds.push(pCategoryId, categoryId);
             }
         }
-        return {categoryIds}
-    }, [isUpdate, selectedProduct])
+        return { categoryIds };
+    }, [isUpdate, selectedProduct]);
 
     return (
-        <Card title={
-            <div>
-                <LinkButton onClick={() => history.push('/product')}>
-                    <ArrowLeftOutlined/>
-                </LinkButton>
-                {isUpdate ? 'Update Product' : 'Add Product'}{' '}
-            </div>}>
+        <Card
+            title={
+                <div>
+                    <LinkButton onClick={() => history.push('/product')}>
+                        <ArrowLeftOutlined />
+                    </LinkButton>
+                    {isUpdate ? 'Update Product' : 'Add Product'}{' '}
+                </div>
+            }
+        >
             <Form ref={formRef} {...formItemLayout}>
                 <Item
                     label="Product name"
@@ -175,7 +188,7 @@ export default function ProductAddUpdate() {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input />
                 </Item>
                 <Item
                     name="productDetail"
@@ -193,7 +206,7 @@ export default function ProductAddUpdate() {
                     ]}
                 >
                     {/* set the minimum rows of the input area */}
-                    <TextArea autosize={{minRows: 2}}></TextArea>
+                    <TextArea autosize={{ minRows: 2 }}></TextArea>
                 </Item>
                 <Item
                     label="Price"
@@ -211,8 +224,8 @@ export default function ProductAddUpdate() {
                                 }
                                 return Promise.reject(
                                     new Error(
-                                        'The price must be bigger than 0!'
-                                    )
+                                        'The price must be bigger than 0!',
+                                    ),
                                 );
                             },
                         }),
@@ -245,15 +258,12 @@ export default function ProductAddUpdate() {
                     />
                 </Item>
                 <Item
-                    labelCol={{span: 2}}
-                    wrapperCol={{span: 16}}
+                    labelCol={{ span: 2 }}
+                    wrapperCol={{ span: 16 }}
                     name="description"
                     label="Description"
                 >
-                    <RichTextEditor
-                        detail={details}
-                        bindDetails={setDetails}
-                    />
+                    <RichTextEditor detail={details} bindDetails={setDetails} />
                 </Item>
                 <Button type="primary" onClick={submit}>
                     Submit

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Upload, Modal, message} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
-import {redeletePicture} from '../../api/action';
-import {IMAGE_UPLOAD, IMAGE_UPLOAD_URL} from "../../utils/constants";
+import React, { Component } from 'react';
+import { Upload, Modal, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { redeletePicture } from '../../api/action';
+import { IMAGE_UPLOAD, IMAGE_UPLOAD_URL } from '../../utils/constants';
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ class PicturesWall extends Component {
     constructor(props) {
         super(props);
         let fileList = [];
-        const {imgs} = this.props;
+        const { imgs } = this.props;
         if (imgs && imgs.length > 0) {
             fileList = imgs.map((img, index) => {
                 return {
@@ -32,12 +32,12 @@ class PicturesWall extends Component {
             previewVisible: false,
             previewImage: '',
             previewTitle: '',
-            fileList: fileList
+            fileList: fileList,
         };
     }
 
     // close preview window
-    handleCancel = () => this.setState({previewVisible: false});
+    handleCancel = () => this.setState({ previewVisible: false });
     handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
@@ -51,12 +51,12 @@ class PicturesWall extends Component {
         });
     };
 
-    handleChange = async ({file, fileList}) => {
+    handleChange = async ({ file, fileList }) => {
         if (file.status === 'done') {
             const result = file.response;
             if (result.status === 0) {
                 message.success('upload successfully');
-                const {name, url} = result.data;
+                const { name, url } = result.data;
                 const file = fileList[fileList.length - 1];
                 file.name = name;
                 file.url = url;
@@ -71,8 +71,8 @@ class PicturesWall extends Component {
                 message.error('delete failed');
             }
         }
-        this.setState({fileList});
-        this.props.bindPictures(fileList.map(item => item.name));
+        this.setState({ fileList });
+        this.props.bindPictures(fileList.map((item) => item.name));
     };
 
     // transfor picture names to parent companent
@@ -81,12 +81,12 @@ class PicturesWall extends Component {
     };
 
     render() {
-        const {previewVisible, previewImage, fileList, previewTitle} =
+        const { previewVisible, previewImage, fileList, previewTitle } =
             this.state;
         const uploadButton = (
             <div>
-                <PlusOutlined/>
-                <div style={{marginTop: 8}}>Upload</div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
             </div>
         );
         return (
@@ -111,7 +111,7 @@ class PicturesWall extends Component {
                 >
                     <img
                         alt="example"
-                        style={{width: '100%'}}
+                        style={{ width: '100%' }}
                         src={previewImage}
                     />
                 </Modal>
