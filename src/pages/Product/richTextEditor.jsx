@@ -5,7 +5,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 
-function RichTextEditor({ detail, bindDetails }) {
+export default function RichTextEditor({ detail, bindDetails }) {
     const [editorState, setEditorState] = useState(() => {
         if (detail) {
             const contentBlock = htmlToDraft(detail);
@@ -38,5 +38,3 @@ function RichTextEditor({ detail, bindDetails }) {
         />
     );
 }
-
-export default RichTextEditor;

@@ -5,12 +5,13 @@ import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import { Modal } from 'antd';
 import LinkButton from '../link-button';
-import { connect } from 'react-redux';
+import { useHeadTitle } from '../../context/hooks';
 
-function HeaderCom({ headTitle }) {
+export default function HeaderCom() {
     const [logoutIsVisable, setLogoutIsVisable] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date().toString());
     const history = useHistory();
+    const { headTitle } = useHeadTitle();
 
     useEffect(() => {
         const timer = setInterval(
@@ -53,7 +54,6 @@ function HeaderCom({ headTitle }) {
             </div>
             <div className="header-bottom">
                 <div className="header-bottom-left">{headTitle}</div>
-
                 <div className="header-bottom-right">
                     <span>{currentTime}</span>
                 </div>
@@ -61,7 +61,3 @@ function HeaderCom({ headTitle }) {
         </div>
     );
 }
-
-const mapStateToProps = (state) => ({ headTitle: state.headTitle });
-
-export default connect(mapStateToProps)(HeaderCom);

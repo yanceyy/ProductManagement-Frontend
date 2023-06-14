@@ -1,16 +1,15 @@
-import { useState, useMemo, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
 import menuList from '../../config/menu';
 import './index.less';
 import memoryUtils from '../../utils/memoryUtils';
-import { connect } from 'react-redux';
-import { setHeadTitle } from '../../redux/actions';
+import { useHeadTitle } from '../../context/hooks';
 
-function LeftNav(props) {
+export default function LeftNav() {
     const location = useLocation();
     const history = useHistory();
+    const { setHeadTitle } = useHeadTitle();
 
     const [openKey, setOpenKey] = useState([]);
 
@@ -32,9 +31,6 @@ function LeftNav(props) {
             return menuList.map((item) => {
                 if (hasAuth(item)) {
                     if (!item.children) {
-                        if (item.key === path || path.indexOf(item.key) === 0) {
-                            props.setHeadTitle(item.title);
-                        }
                         return {
                             key: item.key,
                             icon: item.icon,
@@ -58,8 +54,26 @@ function LeftNav(props) {
                 }
             });
         },
-        [location.pathname, props],
+        [location.pathname],
     );
+
+    useEffect(() => {
+        function findOpenedMenu(menuList, key) {
+            for (const menu of menuList) {
+                if (menu.key === key) {
+                    return menu;
+                }
+                if (menu.children) {
+                    const openedMenu = findOpenedMenu(menu.children, key);
+                    if (openedMenu) {
+                        return openedMenu;
+                    }
+                }
+            }
+        }
+        const selectedMenu = findOpenedMenu(menuList, location.pathname);
+        setHeadTitle(selectedMenu?.title ?? '');
+    }, [setHeadTitle, location.pathname]);
 
     const menuItems = useMemo(() => {
         return getMenuItems(menuList);
@@ -88,5 +102,3 @@ function LeftNav(props) {
         </div>
     );
 }
-
-export default connect(null, { setHeadTitle })(LeftNav);

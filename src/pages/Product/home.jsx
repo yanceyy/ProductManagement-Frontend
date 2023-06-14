@@ -186,7 +186,7 @@ export default function ProductHome() {
                     total,
                 }}
                 scroll={{ y: 800 }}
-                rowKey="_id"
+                key="_id"
                 dataSource={products}
             />
         </Card>

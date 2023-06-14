@@ -17,7 +17,6 @@ const { Header, Footer, Sider, Content } = Layout;
 
 const Admin = () => {
     const user = memoryUtils.user;
-
     if (!user || !user._id) {
         return <Redirect to="/login" />;
     }
