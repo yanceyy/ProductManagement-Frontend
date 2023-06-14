@@ -3,7 +3,7 @@ import { Card, Select, Input, Button, Table, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import LinkButton from '../../components/link-button';
-import { regetList, researchProducts, reupdateStatus } from '../../api/action';
+import { reGetList, reSearchProducts, reUpdateStatus } from '../../api/action';
 import { PAGE_SIZE } from '../../utils/constants';
 
 export default function ProductHome() {
@@ -26,7 +26,7 @@ export default function ProductHome() {
         // get the data from server
         setLoading(true);
         if (searchName) {
-            researchProducts(pageNum, PAGE_SIZE, searchName, searchType).then(
+            reSearchProducts(pageNum, PAGE_SIZE, searchName, searchType).then(
                 (result) => {
                     if (result.status === 0) {
                         const { list, total } = result.data;
@@ -36,7 +36,7 @@ export default function ProductHome() {
                 },
             );
         } else {
-            regetList(pageNum, PAGE_SIZE).then((result) => {
+            reGetList(pageNum, PAGE_SIZE).then((result) => {
                 if (result.status === 0) {
                     const { list, total } = result.data;
                     setProducts(list);
@@ -48,7 +48,7 @@ export default function ProductHome() {
     };
 
     const updateStatus = async (id, status) => {
-        const result = await reupdateStatus(id, status);
+        const result = await reUpdateStatus(id, status);
         if (result.status === 0) {
             message.success('Update successfully');
         } else {

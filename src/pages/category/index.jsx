@@ -3,9 +3,9 @@ import { Card, Button, Table, message, Modal } from 'antd';
 import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import LinkButton from '../../components/link-button';
 import {
-    regetCategory,
-    readdCategory,
-    reupdateCategory,
+    reGetCategory,
+    reAddCategory,
+    reUpdateCategory,
 } from '../../api/action';
 import AddForm from './addForm';
 import UpdateForm from './updateForm';
@@ -25,7 +25,7 @@ export default function Category() {
     const getCategoryNames = (requireId) => {
         setLoading(true);
         const _parentId = requireId || parentId;
-        return regetCategory(parentId).then((result) => {
+        return reGetCategory(parentId).then((result) => {
             if (result.status === 0) {
                 if (_parentId === '0') setCategoryNames(result.data);
                 else setSubCategoryNames(result.data);
@@ -91,7 +91,7 @@ export default function Category() {
                 setShowStatus(0);
                 const parentId = values['parentId'];
                 const categoryName = values['categoryName'];
-                const result = await readdCategory(parentId, categoryName);
+                const result = await reAddCategory(parentId, categoryName);
                 if (result.status === 0) getCategoryNames(parentId);
             })
             .catch(() => {});
@@ -104,7 +104,7 @@ export default function Category() {
                 setShowStatus(0); // hide the dialogue
                 const cayegoryId = category._id;
                 const categoryName = values['categoryName'];
-                const result = await reupdateCategory(cayegoryId, categoryName);
+                const result = await reUpdateCategory(cayegoryId, categoryName);
                 if (result.status === 0) getCategoryNames();
             })
             .catch(() => {}); // validate the inputtings

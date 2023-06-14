@@ -3,7 +3,7 @@ import { Card, List, Image } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './product.less';
 import { IMAGE_UPLOAD_URL } from '../../utils/constants';
-import { regetCategoryById } from '../../api/action';
+import { reGetCategoryById } from '../../api/action';
 
 /*
 component to show the detailed information about a product
@@ -11,21 +11,21 @@ component to show the detailed information about a product
 
 const Item = List.Item;
 
-function ProductPage(props) {
+function ProductPage({ location, history }) {
     const [cName1, setCName1] = useState('');
     const [cName2, setCName2] = useState('');
     const { pCategoryId, categoryId, name, desc, price, detail, imgs } =
-        props.location.state.product;
+        location.state.product;
 
     useEffect(() => {
         const fetchCategoryNames = async () => {
             if (pCategoryId === '0') {
-                const categoryName = await regetCategoryById(categoryId);
+                const categoryName = await reGetCategoryById(categoryId);
                 setCName1(categoryName.data.name);
             } else {
                 const [categoryName, categoryName2] = await Promise.all([
-                    regetCategoryById(pCategoryId),
-                    regetCategoryById(categoryId),
+                    reGetCategoryById(pCategoryId),
+                    reGetCategoryById(categoryId),
                 ]);
                 setCName1(categoryName.data.name);
                 setCName2(categoryName2.data.name);
@@ -38,7 +38,7 @@ function ProductPage(props) {
     const title = (
         <div>
             <ArrowLeftOutlined
-                onClick={() => props.history.replace('/product')}
+                onClick={() => history.replace('/product')}
                 className="detailgoback"
             />
             <span style={{ marginLeft: '5px' }}>details</span>

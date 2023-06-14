@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { Upload, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { redeletePicture } from '../../api/action';
+import { reDeletePicture } from '../../api/action';
 import { IMAGE_UPLOAD, IMAGE_UPLOAD_URL } from '../../utils/constants';
 
 function getBase64(file) {
@@ -13,11 +13,14 @@ function getBase64(file) {
     });
 }
 
-class PicturesWall extends Component {
-    constructor(props) {
-        super(props);
+export default function PicturesWall({ imgs, bindPictures }) {
+    const [previewVisible, setPreviewVisible] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+
+    const [fileList, setFileList] = useState(() => {
         let fileList = [];
-        const { imgs } = this.props;
+
         if (imgs && imgs.length > 0) {
             fileList = imgs.map((img, index) => {
                 return {
@@ -28,30 +31,24 @@ class PicturesWall extends Component {
                 };
             });
         }
-        this.state = {
-            previewVisible: false,
-            previewImage: '',
-            previewTitle: '',
-            fileList: fileList,
-        };
-    }
+        return fileList;
+    });
 
     // close preview window
-    handleCancel = () => this.setState({ previewVisible: false });
-    handlePreview = async (file) => {
+    const handleCancel = () => setPreviewVisible(false);
+
+    const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
-
-        this.setState({
-            previewImage: file.url || file.preview,
-            previewVisible: true,
-            previewTitle:
-                file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-        });
+        setPreviewImage(file.url || file.preview);
+        setPreviewVisible(true);
+        setPreviewTitle(
+            file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        );
     };
 
-    handleChange = async ({ file, fileList }) => {
+    const handleChange = async ({ file, fileList }) => {
         if (file.status === 'done') {
             const result = file.response;
             if (result.status === 0) {
@@ -64,60 +61,50 @@ class PicturesWall extends Component {
                 message.error('upload failed');
             }
         } else if (file.status === 'removed') {
-            const result = await redeletePicture(file.name);
+            const result = await reDeletePicture(file.name);
             if (result.status === 0) {
                 message.success('delete successfully');
             } else {
                 message.error('delete failed');
             }
         }
-        this.setState({ fileList });
-        this.props.bindPictures(fileList.map((item) => item.name));
+        setFileList(fileList);
+        bindPictures(fileList.map((item) => item.name));
     };
 
-    // transfor picture names to parent companent
-    getImgs = () => {
-        return this.state.fileList.map((file) => file.name);
-    };
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
 
-    render() {
-        const { previewVisible, previewImage, fileList, previewTitle } =
-            this.state;
-        const uploadButton = (
-            <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-            </div>
-        );
-        return (
-            <>
-                <Upload
-                    action={IMAGE_UPLOAD}
-                    listType="picture-card"
-                    fileList={fileList}
-                    accept="image/*"
-                    name="image"
-                    //parameter name in require header
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                >
-                    {fileList.length >= 8 ? null : uploadButton}{' '}
-                </Upload>
-                <Modal
-                    open={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                >
-                    <img
-                        alt="example"
-                        style={{ width: '100%' }}
-                        src={previewImage}
-                    />
-                </Modal>
-            </>
-        );
-    }
+    return (
+        <>
+            <Upload
+                action={IMAGE_UPLOAD}
+                listType="picture-card"
+                fileList={fileList}
+                accept="image/*"
+                name="image"
+                //parameter name in require header
+                onPreview={handlePreview}
+                onChange={handleChange}
+            >
+                {fileList.length >= 8 ? null : uploadButton}{' '}
+            </Upload>
+            <Modal
+                open={previewVisible}
+                title={previewTitle}
+                footer={null}
+                onCancel={handleCancel}
+            >
+                <img
+                    alt="example"
+                    style={{ width: '100%' }}
+                    src={previewImage}
+                />
+            </Modal>
+        </>
+    );
 }
-
-export default PicturesWall;

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Button, Card, Cascader, Form, Input, message } from 'antd';
 import LinkButton from '../../components/link-button';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { readdupdateProduct, regetCategory } from '../../api/action';
+import { reAddUpdateProduct, reGetCategory } from '../../api/action';
 import PicturesWall from './pictures-wall';
 import RichTextEditor from './richTextEditor';
 import { useHistory } from 'react-router-dom';
@@ -67,7 +67,7 @@ export default function ProductAddUpdate() {
                 if (selectedProduct) {
                     data._id = selectedProduct._id;
                 }
-                const result = await readdupdateProduct(data);
+                const result = await reAddUpdateProduct(data);
                 if (result.status === 0) {
                     message.success('success');
                     history.push('/product');
@@ -82,7 +82,7 @@ export default function ProductAddUpdate() {
     }, [details, history, uploadedPicture, selectedProduct]);
 
     const getCategoryArray = useCallback(async (parentId) => {
-        const firstCategories = await regetCategory(parentId);
+        const firstCategories = await reGetCategory(parentId);
         if (firstCategories.status === 0) {
             const categories = firstCategories.data;
             return categories;

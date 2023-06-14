@@ -1,11 +1,11 @@
-import {useEffect, useRef, useState} from 'react';
-import {Card, Button, Table, message, Modal} from 'antd';
-import {PAGE_SIZE} from '../../utils/constants';
-import {regetRoleList as reGetRoleList, reCreateRole, reupdateRole as reUpdateRole} from '../../api/action';
+import { useEffect, useRef, useState } from 'react';
+import { Card, Button, Table, message, Modal } from 'antd';
+import { PAGE_SIZE } from '../../utils/constants';
+import { reGetRoleList, reCreateRole, reUpdateRole } from '../../api/action';
 import AddForm from './add-form';
 import AuthForm from './auth-form';
-import {useHistory} from 'react-router-dom';
-import {formateDate} from '../../utils/dateUtils';
+import { useHistory } from 'react-router-dom';
+import { formateDate } from '../../utils/dateUtils';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 
@@ -30,7 +30,7 @@ const columns = [
     },
 ];
 
-export default function Role(){
+export default function Role() {
     const [roles, setRoles] = useState([]);
     const [role, setRole] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -41,15 +41,15 @@ export default function Role(){
     // get tabel data from server
     const getTableData = async () => {
         setIsLoading(true);
-        try{
-        const data = await reGetRoleList();
-        if (data.status === 0) {
-            const roles = data.data;
-            setRoles(roles);
-        } else {
-            message.error("couldn't get require data from server");
-        }
-        }finally {
+        try {
+            const data = await reGetRoleList();
+            if (data.status === 0) {
+                const roles = data.data;
+                setRoles(roles);
+            } else {
+                message.error("couldn't get require data from server");
+            }
+        } finally {
             setIsLoading(false);
         }
     };
@@ -66,7 +66,8 @@ export default function Role(){
     // add role
     const addRole = () => {
         // similar to add category
-        form.current.validateFields()
+        form.current
+            .validateFields()
             .then(async (values) => {
                 const result = await reCreateRole(values['RoleName']);
                 if (result.status === 0) {
@@ -76,8 +77,7 @@ export default function Role(){
                     setShowStatus(0);
                 } else message.error('add failed');
             })
-            .catch(() => {
-            });
+            .catch(() => {});
     };
 
     const updateRole = async () => {
@@ -103,14 +103,11 @@ export default function Role(){
 
     useEffect(() => {
         getTableData();
-    },[]);
+    }, []);
 
     const name = (
         <span>
-            <Button
-                type="primary"
-                onClick={() => setShowStatus(1)}
-            >
+            <Button type="primary" onClick={() => setShowStatus(1)}>
                 Create roles
             </Button>
             &nbsp;
@@ -123,51 +120,48 @@ export default function Role(){
             </Button>
         </span>
     );
-        return (
-            <Card title={name}>
-                <Modal
-                    title="Create Role"
-                    open={showStatus === 1}
-                    onOk={addRole}
-                    onCancel={() => {
-                        setShowStatus(0);
-                        form.current.resetFields(); // clear input field
+    return (
+        <Card title={name}>
+            <Modal
+                title="Create Role"
+                open={showStatus === 1}
+                onOk={addRole}
+                onCancel={() => {
+                    setShowStatus(0);
+                    form.current.resetFields(); // clear input field
+                }}
+            >
+                <AddForm
+                    setForm={(_form) => {
+                        form.current = _form;
                     }}
-                >
-                    <AddForm
-                        setForm={(_form) => {
-                            form.current = _form;
-                        }}
-                    />
-                </Modal>
-                <Modal
-                    title="Update Role"
-                    destroyOnClose={true}
-                    open={showStatus === 2}
-                    onOk={updateRole}
-                    onCancel={() => {
-                        setShowStatus(0);
-                    }}
-                >
-                    <AuthForm
-                        setRole={setRole}
-                        role={role}
-                    />
-                </Modal>
-                <Table
-                    dataSource={roles}
-                    onRow={onRow}
-                    rowSelection={{
-                        type: 'radio',
-                        selectedRowKeys: [role._id],
-                        onSelect:setRole,
-                    }}
-                    columns={columns}
-                    loading={isLoading}
-                    bordered
-                    pagination={{defaultPageSize: PAGE_SIZE}}
-                    rowKey="_id"
                 />
-            </Card>
+            </Modal>
+            <Modal
+                title="Update Role"
+                destroyOnClose={true}
+                open={showStatus === 2}
+                onOk={updateRole}
+                onCancel={() => {
+                    setShowStatus(0);
+                }}
+            >
+                <AuthForm setRole={setRole} role={role} />
+            </Modal>
+            <Table
+                dataSource={roles}
+                onRow={onRow}
+                rowSelection={{
+                    type: 'radio',
+                    selectedRowKeys: [role._id],
+                    onSelect: setRole,
+                }}
+                columns={columns}
+                loading={isLoading}
+                bordered
+                pagination={{ defaultPageSize: PAGE_SIZE }}
+                rowKey="_id"
+            />
+        </Card>
     );
 }

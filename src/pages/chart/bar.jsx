@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Button } from 'antd';
 import ReactECharts from 'echarts-for-react';
 
