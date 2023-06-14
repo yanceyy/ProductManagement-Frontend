@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, Button, Table, message, Modal } from 'antd';
 import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import LinkButton from '../../components/link-button';
@@ -22,19 +22,22 @@ export default function Category() {
     const form = useRef();
 
     /* use axios to get all the rows data from server */
-    const getCategoryNames = (requireId) => {
-        setLoading(true);
-        const _parentId = requireId || parentId;
-        return reGetCategory(parentId).then((result) => {
-            if (result.status === 0) {
-                if (_parentId === '0') setCategoryNames(result.data);
-                else setSubCategoryNames(result.data);
-            } else {
-                message.error('Failed to get category data from server');
-            }
-            setLoading(false);
-        });
-    };
+    const getCategoryNames = useCallback(
+        (requireId) => {
+            setLoading(true);
+            const _parentId = requireId || parentId;
+            return reGetCategory(parentId).then((result) => {
+                if (result.status === 0) {
+                    if (_parentId === '0') setCategoryNames(result.data);
+                    else setSubCategoryNames(result.data);
+                } else {
+                    message.error('Failed to get category data from server');
+                }
+                setLoading(false);
+            });
+        },
+        [parentId],
+    );
 
     const showSubcategories = (category) => {
         const { name, _id } = category;
@@ -79,10 +82,9 @@ export default function Category() {
     ];
 
     // fetch data when current parentId changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         getCategoryNames();
-    }, [parentId]);
+    }, [getCategoryNames]);
 
     const addCategory = async () => {
         form.current

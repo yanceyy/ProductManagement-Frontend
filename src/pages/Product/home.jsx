@@ -127,6 +127,7 @@ export default function ProductHome() {
 
     useEffect(() => {
         getColumnData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // run once after initial render
 
     const title = (

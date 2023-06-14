@@ -75,8 +75,7 @@ export default function ProductAddUpdate() {
                     message.error('failed');
                 }
             })
-            .catch((e) => {
-                console.error(e);
+            .catch(() => {
                 message.error('please complete the table');
             });
     }, [details, history, uploadedPicture, selectedProduct]);
