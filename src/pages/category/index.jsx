@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, Button, Table, message, Modal } from 'antd';
-import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import LinkButton from '../../components/link-button';
+import { ArrowRightOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Modal, Table, message } from 'antd';
 import {
-    reGetCategory,
     reAddCategory,
+    reGetCategory,
     reUpdateCategory,
 } from '../../api/action';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import AddForm from './addForm';
+import LinkButton from '../../components/link-button';
 import UpdateForm from './updateForm';
 
 export default function Category() {

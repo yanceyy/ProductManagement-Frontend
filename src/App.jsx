@@ -1,8 +1,10 @@
-import { lazy, Suspense } from 'react';
-import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import './index.less';
-import { Loading } from './components/common/Loading';
+
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { HeadTitleProvider, UserProvider } from './context/provider';
+import { Suspense, lazy } from 'react';
+
+import { Loading } from './components/common/Loading';
 
 const Admin = lazy(() => import('./pages/admin'));
 const Login = lazy(() => import('./pages/login'));

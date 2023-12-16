@@ -1,5 +1,5 @@
+import { Form, Input, Select } from 'antd';
 import { useEffect, useRef } from 'react';
-import { Select, Form, Input } from 'antd';
 
 const Item = Form.Item;
 const Option = Select.Option;

@@ -1,5 +1,6 @@
-import { Spin } from 'antd';
 import './index.less';
+
+import { Spin } from 'antd';
 
 export function Loading() {
     return (

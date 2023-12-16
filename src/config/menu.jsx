@@ -1,14 +1,14 @@
 import {
-    HomeOutlined,
     AppstoreOutlined,
-    BarsOutlined,
-    ToolOutlined,
-    UserOutlined,
-    SafetyCertificateOutlined,
     AreaChartOutlined,
     BarChartOutlined,
+    BarsOutlined,
+    HomeOutlined,
     LineChartOutlined,
     PieChartOutlined,
+    SafetyCertificateOutlined,
+    ToolOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 
 const menuList = [

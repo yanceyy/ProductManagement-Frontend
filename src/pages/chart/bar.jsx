@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Card, Button } from 'antd';
+import { Button, Card } from 'antd';
+
 import ReactECharts from 'echarts-for-react';
+import { useState } from 'react';
 
 const Bar = () => {
     const [sales, setSales] = useState([5, 20, 36, 345, 12, 20]);

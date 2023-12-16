@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Upload, Modal, message } from 'antd';
+import { IMAGE_UPLOAD, IMAGE_UPLOAD_URL } from '../../utils/constants';
+import { Modal, Upload, message } from 'antd';
+
 import { PlusOutlined } from '@ant-design/icons';
 import { reDeletePicture } from '../../api/action';
-import { IMAGE_UPLOAD, IMAGE_UPLOAD_URL } from '../../utils/constants';
+import { useState } from 'react';
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {

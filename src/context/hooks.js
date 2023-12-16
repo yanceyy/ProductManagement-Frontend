@@ -1,5 +1,6 @@
-import { useContext } from 'react';
 import { headTitleContext, userContext } from './context';
+
+import { useContext } from 'react';
 
 export function useHeadTitle() {
     const { headTitle, setHeadTitle } = useContext(headTitleContext);

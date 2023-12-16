@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import './index.less';
-import storageUtils from '../../utils/storageUtils';
-import memoryUtils from '../../utils/memoryUtils';
-import { Modal } from 'antd';
+
+import { useEffect, useState } from 'react';
+
 import LinkButton from '../link-button';
+import { Modal } from 'antd';
+import memoryUtils from '../../utils/memoryUtils';
+import storageUtils from '../../utils/storageUtils';
 import { useHeadTitle } from '../../context/hooks';
+import { useHistory } from 'react-router-dom';
 
 export default function HeaderCom() {
     const [logoutIsVisable, setLogoutIsVisable] = useState(false);

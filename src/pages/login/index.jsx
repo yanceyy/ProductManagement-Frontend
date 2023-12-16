@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
 import './login.less';
+
+import { Button, Checkbox, Form, Input, message } from 'antd';
+import { Redirect, useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import Lottie from 'lottie-react';
 import { login } from '../../api/action';
-import { Form, Input, Button, Checkbox, message } from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
-import { Redirect, useHistory } from 'react-router-dom';
-import Lottie from 'lottie-react';
 
 /*
 router component for login page

@@ -1,16 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
-import { Card, Button, Table, Modal, message, Popconfirm } from 'antd';
-import { PAGE_SIZE } from '../../utils/constants';
-
+import { Button, Card, Modal, Popconfirm, Table, message } from 'antd';
 import {
-    reGetUserList,
-    reDeleteUser,
     reAddUser,
+    reDeleteUser,
+    reGetUserList,
     reUpdateUser,
 } from '../../api/action';
-import { formateDate } from '../../utils/dateUtils';
-import LinkButton from '../../components/link-button';
+import { useEffect, useRef, useState } from 'react';
+
 import AddForm from './add-form';
+import LinkButton from '../../components/link-button';
+import { PAGE_SIZE } from '../../utils/constants';
+import { formateDate } from '../../utils/dateUtils';
 
 export default function User() {
     const [users, setUsers] = useState([]);

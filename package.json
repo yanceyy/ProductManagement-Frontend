@@ -1,64 +1,64 @@
 {
-  "name": "react-admin",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@ant-design/icons": "^5.1.4",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "@vitejs/plugin-legacy": "^4.0.4",
-    "antd": "^5.6.1",
-    "axios": "0.21.2",
-    "draft-js": "^0.11.7",
-    "draftjs-to-html": "^0.9.1",
-    "echarts": "^5.4.2",
-    "echarts-for-react": "^3.0.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "html-to-draftjs": "^1.5.0",
-    "less": "^4.1.1",
-    "less-loader": "^7.3.0",
-    "lottie-react": "^2.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-draft-wysiwyg": "^1.15.0",
-    "react-redux": "^8.0.7",
-    "react-router-dom": "^5.2.0",
-    "store": "^2.0.12"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint --fix --ext .js,.jsx ."
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.14.5",
-    "@vitejs/plugin-react": "^3.1.0",
-    "@vitejs/plugin-react-swc": "^3.3.0",
-    "autoprefixer": "^10.4.14",
-    "eslint": "^7.32.0",
-    "eslint-plugin-react": "^7.24.0",
-    "lint-staged": "^11.1.2",
-    "prettier": "^2.3.2",
-    "vite": "^4.3.3",
-    "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-remove-console": "^2.1.1"
-  }
+    "name": "react-admin",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@ant-design/icons": "^5.1.4",
+        "@testing-library/react": "^11.2.7",
+        "@testing-library/user-event": "^12.8.3",
+        "@vitejs/plugin-legacy": "^4.0.4",
+        "antd": "^5.6.1",
+        "axios": "0.21.2",
+        "draft-js": "^0.11.7",
+        "draftjs-to-html": "^0.9.1",
+        "echarts": "^5.4.2",
+        "echarts-for-react": "^3.0.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "html-to-draftjs": "^1.5.0",
+        "less": "^4.1.1",
+        "less-loader": "^7.3.0",
+        "lottie-react": "^2.4.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-draft-wysiwyg": "^1.15.0",
+        "react-redux": "^8.0.7",
+        "react-router-dom": "^5.2.0",
+        "store": "^2.0.12"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint --fix --ext .js,.jsx ."
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/plugin-proposal-decorators": "^7.14.5",
+        "@vitejs/plugin-react": "^3.1.0",
+        "@vitejs/plugin-react-swc": "^3.3.0",
+        "autoprefixer": "^10.4.14",
+        "eslint": "^7.32.0",
+        "eslint-plugin-react": "^7.24.0",
+        "lint-staged": "^11.1.2",
+        "prettier": "^2.3.2",
+        "vite": "^4.3.3",
+        "vite-plugin-eslint": "^1.8.1",
+        "vite-plugin-remove-console": "^2.1.1"
+    }
 }

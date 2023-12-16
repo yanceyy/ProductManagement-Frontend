@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Card, Button } from 'antd';
+import { Button, Card } from 'antd';
+
 import ReactECharts from 'echarts-for-react';
+import { useState } from 'react';
 
 const Line = () => {
     const [sales, setSales] = useState([25, 20, 12, 35, 5, 15]);

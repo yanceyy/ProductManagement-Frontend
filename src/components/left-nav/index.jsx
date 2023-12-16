@@ -1,9 +1,11 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Menu } from 'antd';
-import menuList from '../../config/menu';
 import './index.less';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import { Menu } from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
+import menuList from '../../config/menu';
 import { useHeadTitle } from '../../context/hooks';
 
 export default function LeftNav() {

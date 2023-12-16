@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
+
+import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { useState } from 'react';
 
 export default function RichTextEditor({ detail, bindDetails }) {
     const [editorState, setEditorState] = useState(() => {

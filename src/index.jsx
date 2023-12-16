@@ -1,7 +1,7 @@
 import App from './App';
 import { createRoot } from 'react-dom/client';
-import storageUtils from './utils/storageUtils';
 import memoryUtils from './utils/memoryUtils';
+import storageUtils from './utils/storageUtils';
 
 const user = storageUtils.getUser();
 memoryUtils.user = user;

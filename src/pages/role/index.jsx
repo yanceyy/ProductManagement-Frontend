@@ -1,13 +1,14 @@
+import { Button, Card, Modal, Table, Tooltip, message } from 'antd';
+import { reCreateRole, reGetRoleList, reUpdateRole } from '../../api/action';
 import { useEffect, useRef, useState } from 'react';
-import { Card, Button, Table, message, Modal, Tooltip } from 'antd';
-import { PAGE_SIZE } from '../../utils/constants';
-import { reGetRoleList, reCreateRole, reUpdateRole } from '../../api/action';
+
 import AddForm from './add-form';
 import AuthForm from './auth-form';
-import { useHistory } from 'react-router-dom';
+import { PAGE_SIZE } from '../../utils/constants';
 import { formateDate } from '../../utils/dateUtils';
-import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
+import storageUtils from '../../utils/storageUtils';
+import { useHistory } from 'react-router-dom';
 
 const columns = [
     {

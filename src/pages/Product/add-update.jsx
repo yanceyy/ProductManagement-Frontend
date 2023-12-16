@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Button, Card, Cascader, Form, Input, message } from 'antd';
-import LinkButton from '../../components/link-button';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import { reAddUpdateProduct, reGetCategory } from '../../api/action';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import LinkButton from '../../components/link-button';
 import PicturesWall from './pictures-wall';
 import RichTextEditor from './richTextEditor';
 import { useHistory } from 'react-router-dom';

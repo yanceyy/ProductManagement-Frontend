@@ -1,11 +1,13 @@
-import { Redirect, Switch, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import './index.less';
+
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+
+import HeaderCom from '../../components/header';
+import { Layout } from 'antd';
+import LeftNav from '../../components/left-nav';
 import { Loading } from '../../components/common/Loading';
 import memoryUtils from '../../utils/memoryUtils';
-import { Layout } from 'antd';
-import './index.less';
-import HeaderCom from '../../components/header';
-import LeftNav from '../../components/left-nav';
 
 const Role = lazy(() => import('../role'));
 const User = lazy(() => import('../user'));

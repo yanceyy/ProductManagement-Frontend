@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Card, List, Image } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import './product.less';
+
+import { Card, Image, List } from 'antd';
+import { useEffect, useState } from 'react';
+
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { IMAGE_UPLOAD_URL } from '../../utils/constants';
 import { reGetCategoryById } from '../../api/action';
 

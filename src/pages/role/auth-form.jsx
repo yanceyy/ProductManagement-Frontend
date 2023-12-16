@@ -1,4 +1,5 @@
-import { Tree, Input } from 'antd';
+import { Input, Tree } from 'antd';
+
 import menuList from '../../config/menu';
 
 export default function AuthForm({ role, setRole }) {
