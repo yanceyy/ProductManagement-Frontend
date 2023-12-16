@@ -1,12 +1,12 @@
 import ajax from './ajax';
-import { BASEURL } from '../utils/constants';
+import {BASEURL} from '../utils/constants';
 
 /*
 account login
 */
 export const login = (username, password) =>
     ajax(
-        BASEURL + '/login',
+        BASEURL + '/auth/login',
         {
             username,
             password,
@@ -33,41 +33,40 @@ read category list
 */
 
 export const reGetCategory = (parentId) =>
-    ajax(BASEURL + '/manage/category/list', { parentId });
+    ajax(BASEURL + '/category', {parentId});
 
 /*
 add category
 */
-export const reAddCategory = (parentId, categoryName) =>
+export const reAddCategory = (pCategoryId, name) =>
     ajax(
-        BASEURL + '/manage/category/add',
+        BASEURL + '/category',
         {
-            parentId,
-            categoryName,
+            pCategoryId,
+            name,
         },
-        'POST',
+        'Post',
     );
 
 /*
 update category list
 */
 
-export const reUpdateCategory = (categoryId, categoryName) =>
+export const reUpdateCategory = (categoryId, name) =>
     ajax(
-        BASEURL + '/manage/category/update',
+        BASEURL + `/category/${categoryId}`,
         {
-            categoryId,
-            categoryName,
+            name
         },
-        'POST',
+        'Patch',
     );
 
 /*
-get product list
+get a product list
 */
 export const reGetList = (pageNum, pageSize) =>
     ajax(
-        BASEURL + '/manage/product/list',
+        BASEURL + '/product',
         {
             pageNum,
             pageSize,
@@ -94,10 +93,8 @@ Get category name by Id
 */
 export const reGetCategoryById = (categoryId) =>
     ajax(
-        BASEURL + '/manage/category/info',
-        {
-            categoryId,
-        },
+        BASEURL + `/category/${categoryId}`,
+        {},
         'GET',
     );
 
@@ -127,33 +124,49 @@ export const reDeletePicture = (name) =>
     );
 
 /*
-Add and update products
+Add products
 */
 
-export const reAddUpdateProduct = (product) =>
-    ajax(
-        BASEURL + '/manage/product/' + (product._id ? 'update' : 'add'),
+export const reAddProduct = (product) => {
+    return ajax(
+        BASEURL + '/product',
         {
             ...product,
         },
-        'POST',
+        'Post',
     );
+}
+
+/*
+Update products
+*/
+
+export const reUpdateProduct = (id, product) => {
+    return ajax(
+        BASEURL + `/product/${id}`,
+        {
+            ...product,
+        },
+        'Patch',
+    );
+}
+
 
 /*
 Obatin role list
 */
 
-export const reGetRoleList = () => ajax(BASEURL + '/manage/role/list', 'GET');
+export const reGetRoleList = () => ajax(BASEURL + '/role');
 
 /*
 Create role
 */
 
-export const reCreateRole = (roleName) =>
+export const reCreateRole = (name) =>
     ajax(
-        BASEURL + '/manage/role/add',
+        BASEURL + '/role',
         {
-            roleName,
+            name,
         },
         'POST',
     );
@@ -162,69 +175,65 @@ export const reCreateRole = (roleName) =>
 Update role
 */
 
-export const reUpdateRole = ({ _id, menus, auth_time, auth_name }) =>
+export const reUpdateRole = ({_id, policies}) =>
     ajax(
-        BASEURL + '/manage/role/update',
+        BASEURL + `/role/${_id}`,
         {
-            _id,
-            menus,
-            auth_time,
-            auth_name,
+            policies
         },
-        'POST',
+        'patch',
     );
 
 /*
 Add user
 */
 
-export const reAddUser = ({ username, password, phone, email, role_id }) =>
+export const reAddUser = ({username, password, phone, email, roleId}) =>
     ajax(
-        BASEURL + '/manage/user/add',
+        BASEURL + '/user',
         {
             username,
             password,
             phone,
             email,
-            role_id,
+            roleId,
         },
-        'POST',
+        'post',
     );
 
 /*
 Obatin user list
 */
 
-export const reGetUserList = () => ajax(BASEURL + '/manage/user/list', 'GET');
+export const reGetUserList = () => ajax(BASEURL + '/user');
 
 /*
 Delete user
 */
 
 export const reDeleteUser = (userId) =>
-    ajax(BASEURL + '/manage/user/delete', { userId }, 'POST');
+    ajax(BASEURL + `/user/${userId}`, {}, 'Delete');
 
 /*
 Add user
 */
 
 export const reUpdateUser = ({
-    _id,
-    username,
-    password,
-    phone,
-    email,
-    role_id,
-}) =>
+                                 _id,
+                                 username,
+                                 password,
+                                 phone,
+                                 email,
+                                 roleId,
+                             }) =>
     ajax(
-        BASEURL + '/manage/user/update',
+        BASEURL + `/user/${_id}`,
         {
-            _id,
             username,
             password,
             phone,
             email,
-            role_id,
+            roleId
         },
-        'POST',
+        'Patch',
     );

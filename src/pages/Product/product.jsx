@@ -1,11 +1,11 @@
 import './product.less';
 
-import { Card, Image, List } from 'antd';
-import { useEffect, useState } from 'react';
+import {Card, Image, List} from 'antd';
+import {useEffect, useState} from 'react';
 
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import { IMAGE_UPLOAD_URL } from '../../utils/constants';
-import { reGetCategoryById } from '../../api/action';
+import {ArrowLeftOutlined} from '@ant-design/icons';
+import {IMAGE_UPLOAD_URL} from '../../utils/constants';
+import {reGetCategoryById} from '../../api/action';
 
 /*
 component to show the detailed information about a product
@@ -13,24 +13,25 @@ component to show the detailed information about a product
 
 const Item = List.Item;
 
-function ProductPage({ location, history }) {
+function ProductPage({location, history}) {
     const [cName1, setCName1] = useState('');
     const [cName2, setCName2] = useState('');
-    const { pCategoryId, categoryId, name, desc, price, detail, imgs } =
+    const {pCategoryId, categoryId, name, desc, price, detail, images} =
         location.state.product;
 
     useEffect(() => {
         const fetchCategoryNames = async () => {
-            if (pCategoryId === '0') {
+            console.log({pCategoryId, categoryId})
+            if (pCategoryId === undefined) {
                 const categoryName = await reGetCategoryById(categoryId);
-                setCName1(categoryName.data.name);
+                setCName1(categoryName.name);
             } else {
                 const [categoryName, categoryName2] = await Promise.all([
                     reGetCategoryById(pCategoryId),
                     reGetCategoryById(categoryId),
                 ]);
-                setCName1(categoryName.data.name);
-                setCName2(categoryName2.data.name);
+                setCName1(categoryName.name);
+                setCName2(categoryName2.name);
             }
         };
 
@@ -43,7 +44,7 @@ function ProductPage({ location, history }) {
                 onClick={() => history.replace('/product')}
                 className="detailgoback"
             />
-            <span style={{ marginLeft: '5px' }}>details</span>
+            <span style={{marginLeft: '5px'}}>details</span>
         </div>
     );
 
@@ -71,7 +72,7 @@ function ProductPage({ location, history }) {
                 <Item className="product-detail">
                     <span className="left-col">Pictures:</span>
                     <span className="right-col">
-                        {imgs.map((img, index) => (
+                        {(images ?? []).map((img, index) => (
                             <Image
                                 key={index}
                                 className="productimgs"
@@ -84,7 +85,7 @@ function ProductPage({ location, history }) {
                     <span className="left-col">Description:</span>
                     <span
                         className="right-col"
-                        dangerouslySetInnerHTML={{ __html: detail }}
+                        dangerouslySetInnerHTML={{__html: detail}}
                     ></span>
                 </Item>
             </List>

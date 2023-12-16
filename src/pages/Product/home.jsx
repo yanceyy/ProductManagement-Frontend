@@ -1,11 +1,11 @@
-import { Button, Card, Input, Select, Table, message } from 'antd';
-import { reGetList, reSearchProducts, reUpdateStatus } from '../../api/action';
-import { useEffect, useState } from 'react';
+import {Button, Card, Input, Select, Table, message} from 'antd';
+import {reGetList, reSearchProducts, reUpdateStatus} from '../../api/action';
+import {useEffect, useState} from 'react';
 
 import LinkButton from '../../components/link-button';
-import { PAGE_SIZE } from '../../utils/constants';
-import { PlusOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router-dom';
+import {PAGE_SIZE} from '../../utils/constants';
+import {PlusOutlined} from '@ant-design/icons';
+import {useHistory} from 'react-router-dom';
 
 export default function ProductHome() {
     const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ export default function ProductHome() {
             reSearchProducts(pageNum, PAGE_SIZE, searchName, searchType).then(
                 (result) => {
                     if (result.status === 0) {
-                        const { list, total } = result.data;
+                        const {list, total} = result.data;
                         setProducts(list);
                         setTotal(total);
                     }
@@ -38,11 +38,8 @@ export default function ProductHome() {
             );
         } else {
             reGetList(pageNum, PAGE_SIZE).then((result) => {
-                if (result.status === 0) {
-                    const { list, total } = result.data;
-                    setProducts(list);
-                    setTotal(total);
-                }
+                setProducts(result);
+                setTotal(1);
             });
         }
         setLoading(false);
@@ -80,14 +77,14 @@ export default function ProductHome() {
         {
             title: 'Status',
             render: function ListAction(product) {
-                const { status } = product;
+                const {status} = product;
                 return <span>{status === 1 ? 'Listed' : 'Unlisted'}</span>;
             },
         },
         {
             title: 'Operations',
             render: function EditAction(product) {
-                const { status, _id } = product;
+                const {status, _id} = product;
                 return (
                     <span>
                         <LinkButton
@@ -99,7 +96,7 @@ export default function ProductHome() {
                         </LinkButton>
                         <LinkButton
                             onClick={() =>
-                                history.push('/product/info', { product })
+                                history.push('/product/info', {product})
                             }
                         >
                             Details
@@ -128,7 +125,7 @@ export default function ProductHome() {
             <Select
                 value={searchType}
                 onChange={(value) => setSearchType(value)}
-                style={{ width: '150px' }}
+                style={{width: '150px'}}
             >
                 <Select.Option value="productName">By name</Select.Option>
                 <Select.Option value="productDesc">
@@ -158,7 +155,7 @@ export default function ProductHome() {
                 history.push('/product/add');
             }}
         >
-            <PlusOutlined />
+            <PlusOutlined/>
             Add Product
         </Button>
     );
@@ -166,7 +163,7 @@ export default function ProductHome() {
     return (
         <Card title={title} extra={extra}>
             <Table
-                style={{ height: '100%' }}
+                style={{height: '100%'}}
                 bordered
                 columns={columns}
                 loading={loading}
@@ -179,7 +176,7 @@ export default function ProductHome() {
                     },
                     total,
                 }}
-                scroll={{ y: 800 }}
+                scroll={{y: 800}}
                 key="_id"
                 dataSource={products}
             />

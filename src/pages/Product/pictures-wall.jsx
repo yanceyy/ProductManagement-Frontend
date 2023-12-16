@@ -1,9 +1,10 @@
-import { IMAGE_UPLOAD, IMAGE_UPLOAD_URL } from '../../utils/constants';
-import { Modal, Upload, message } from 'antd';
+import {BASEURL, IMAGE_UPLOAD, IMAGE_UPLOAD_URL} from '../../utils/constants';
+import {Modal, Upload, message} from 'antd';
 
-import { PlusOutlined } from '@ant-design/icons';
-import { reDeletePicture } from '../../api/action';
-import { useState } from 'react';
+import {PlusOutlined} from '@ant-design/icons';
+import {reDeletePicture} from '../../api/action';
+import {useState} from 'react';
+import memoryUtils from "../../utils/memoryUtils";
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -14,7 +15,7 @@ function getBase64(file) {
     });
 }
 
-export default function PicturesWall({ imgs, bindPictures }) {
+export default function PicturesWall({imgs, bindPictures}) {
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -49,18 +50,15 @@ export default function PicturesWall({ imgs, bindPictures }) {
         );
     };
 
-    const handleChange = async ({ file, fileList }) => {
+    const handleChange = async ({file, fileList}) => {
         if (file.status === 'done') {
             const result = file.response;
-            if (result.status === 0) {
-                message.success('upload successfully');
-                const { name, url } = result.data;
-                const file = fileList[fileList.length - 1];
-                file.name = name;
-                file.url = url;
-            } else {
-                message.error('upload failed');
-            }
+            message.success('upload successfully');
+            const {filename} = result;
+
+            file = fileList[fileList.length - 1];
+            file.name = filename;
+            file.url = BASEURL + '/files/' + filename;
         } else if (file.status === 'removed') {
             const result = await reDeletePicture(file.name);
             if (result.status === 0) {
@@ -75,10 +73,16 @@ export default function PicturesWall({ imgs, bindPictures }) {
 
     const uploadButton = (
         <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
+            <PlusOutlined/>
+            <div style={{marginTop: 8}}>Upload</div>
         </div>
     );
+
+    const bearerToken = memoryUtils?.user?.token
+
+    const headers = {
+        Authorization: `Bearer ${bearerToken}`
+    };
 
     return (
         <>
@@ -87,10 +91,11 @@ export default function PicturesWall({ imgs, bindPictures }) {
                 listType="picture-card"
                 fileList={fileList}
                 accept="image/*"
-                name="image"
+                name="file"
                 //parameter name in require header
                 onPreview={handlePreview}
                 onChange={handleChange}
+                headers={headers}
             >
                 {fileList.length >= 8 ? null : uploadButton}{' '}
             </Upload>
@@ -102,7 +107,7 @@ export default function PicturesWall({ imgs, bindPictures }) {
             >
                 <img
                     alt="example"
-                    style={{ width: '100%' }}
+                    style={{width: '100%'}}
                     src={previewImage}
                 />
             </Modal>

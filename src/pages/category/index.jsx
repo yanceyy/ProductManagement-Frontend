@@ -1,11 +1,11 @@
-import { ArrowRightOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Modal, Table, message } from 'antd';
+import {ArrowRightOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, Card, Modal, Table} from 'antd';
 import {
     reAddCategory,
     reGetCategory,
     reUpdateCategory,
 } from '../../api/action';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 import AddForm from './addForm';
 import LinkButton from '../../components/link-button';
@@ -15,25 +15,22 @@ export default function Category() {
     const [categoryNames, setCategoryNames] = useState([]);
     const [subCategoryNames, setSubCategoryNames] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [parentId, setParentId] = useState('0');
+    const [parentId, setParentId] = useState(undefined);
     const [parentName, setParentName] = useState('First level category');
     const [showStatus, setShowStatus] = useState(0);
     const [category, setCategory] = useState({});
 
     const form = useRef();
 
-    /* use axios to get all the rows data from server */
+    /* use axios to get all the row data from server */
     const getCategoryNames = useCallback(
         (requireId) => {
             setLoading(true);
             const _parentId = requireId || parentId;
             return reGetCategory(parentId).then((result) => {
-                if (result.status === 0) {
-                    if (_parentId === '0') setCategoryNames(result.data);
-                    else setSubCategoryNames(result.data);
-                } else {
-                    message.error('Failed to get category data from server');
-                }
+                console.log({result})
+                if (!_parentId) setCategoryNames(result);
+                else setSubCategoryNames(result);
                 setLoading(false);
             });
         },
@@ -41,7 +38,7 @@ export default function Category() {
     );
 
     const showSubcategories = (category) => {
-        const { name, _id } = category;
+        const {name, _id} = category;
         setParentName(name);
         setParentId(_id);
     };
@@ -67,7 +64,7 @@ export default function Category() {
                         <LinkButton onClick={() => showUpdate(category)}>
                             Change
                         </LinkButton>
-                        {parentId === '0' ? (
+                        {!parentId ? (
                             <LinkButton
                                 onClick={() => showSubcategories(category)}
                             >
@@ -94,10 +91,11 @@ export default function Category() {
                 setShowStatus(0);
                 const parentId = values['parentId'];
                 const categoryName = values['categoryName'];
-                const result = await reAddCategory(parentId, categoryName);
-                if (result.status === 0) getCategoryNames(parentId);
+                await reAddCategory(parentId, categoryName);
+                getCategoryNames(parentId);
             })
-            .catch(() => {});
+            .catch(() => {
+            });
     };
 
     const updateCategory = () => {
@@ -107,27 +105,28 @@ export default function Category() {
                 setShowStatus(0); // hide the dialogue
                 const cayegoryId = category._id;
                 const categoryName = values['categoryName'];
-                const result = await reUpdateCategory(cayegoryId, categoryName);
-                if (result.status === 0) getCategoryNames();
+                await reUpdateCategory(cayegoryId, categoryName);
+                getCategoryNames();
             })
-            .catch(() => {}); // validate the inputtings
+            .catch(() => {
+            }); // validate the inputtings
     };
 
     const title =
-        parentId === '0' ? (
+        !parentId ? (
             <span>First level category</span>
         ) : (
             <span>
                 <LinkButton
                     onClick={() => {
-                        setParentId('0');
+                        setParentId(undefined);
                         setParentName('');
                         setSubCategoryNames([]);
                     }}
                 >
                     First level category
                 </LinkButton>
-                <ArrowRightOutlined /> {parentName}
+                <ArrowRightOutlined/> {parentName}
             </span>
         );
     const extra = (
@@ -137,7 +136,7 @@ export default function Category() {
                 setShowStatus(1);
             }}
         >
-            <PlusOutlined />
+            <PlusOutlined/>
             Add
         </Button>
     );
@@ -180,12 +179,12 @@ export default function Category() {
             <Card title={title} extra={extra}>
                 <Table
                     dataSource={
-                        parentId === '0' ? categoryNames : subCategoryNames
+                        !parentId ? categoryNames : subCategoryNames
                     }
                     columns={columns}
                     loading={loading}
                     bordered
-                    pagination={{ defaultPageSize: 15, showQuickJumper: true }}
+                    pagination={{defaultPageSize: 15, showQuickJumper: true}}
                     rowKey="_id"
                 />
             </Card>

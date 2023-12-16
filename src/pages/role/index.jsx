@@ -1,14 +1,14 @@
-import { Button, Card, Modal, Table, Tooltip, message } from 'antd';
-import { reCreateRole, reGetRoleList, reUpdateRole } from '../../api/action';
-import { useEffect, useRef, useState } from 'react';
+import {Button, Card, Modal, Table, Tooltip, message} from 'antd';
+import {reCreateRole, reGetRoleList, reUpdateRole} from '../../api/action';
+import {useEffect, useRef, useState} from 'react';
 
 import AddForm from './add-form';
 import AuthForm from './auth-form';
-import { PAGE_SIZE } from '../../utils/constants';
-import { formateDate } from '../../utils/dateUtils';
+import {PAGE_SIZE} from '../../utils/constants';
+import {formateDate} from '../../utils/dateUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 const columns = [
     {
@@ -17,17 +17,17 @@ const columns = [
     },
     {
         title: 'create time',
-        dataIndex: 'create_time',
+        dataIndex: 'createTime',
         render: formateDate,
     },
     {
         title: 'authority time',
-        dataIndex: 'auth_time',
+        dataIndex: 'authGrantTime',
         render: formateDate,
     },
     {
         title: 'authority person',
-        dataIndex: 'auth_name',
+        dataIndex: 'authGrantUsername',
     },
 ];
 
@@ -43,13 +43,10 @@ export default function Role() {
     const getTableData = async () => {
         setIsLoading(true);
         try {
-            const data = await reGetRoleList();
-            if (data.status === 0) {
-                const roles = data.data;
-                setRoles(roles);
-            } else {
-                message.error("couldn't get require data from server");
-            }
+            const roles = await reGetRoleList();
+            setRoles(roles);
+        } catch (e) {
+            message.error("couldn't get require data from server");
         } finally {
             setIsLoading(false);
         }
@@ -70,36 +67,34 @@ export default function Role() {
         form.current
             .validateFields()
             .then(async (values) => {
-                const result = await reCreateRole(values['RoleName']);
-                if (result.status === 0) {
+                try {
+                    await reCreateRole(values['RoleName']);
                     form.current.resetFields(); // clear input field
                     message.success('add successfully');
-                    getTableData();
+                    await getTableData();
                     setShowStatus(0);
-                } else message.error('add failed');
+                } catch (e) {
+                    message.error('add failed');
+                }
             })
-            .catch(() => {});
+            .catch(() => {
+            });
     };
 
     const updateRole = async () => {
         // similar to add category
-        role.auth_name = memoryUtils.user.username;
-        const result = await reUpdateRole(role);
-        if (result.status === 0) {
-            // if the user current change the property of self,
-            // then require to relogin
-            if (memoryUtils.user.role_id === role._id) {
-                storageUtils.removeUser();
-                memoryUtils.user = {};
-                history.replace('/login');
-                message.success('role changes please relogin');
-            } else {
-                message.success('add successfully');
-                setRole(role); // update the outdate role state
-                setShowStatus(0);
-                getTableData(); // update loaded data
-            }
-        } else message.error('add failed');
+        await reUpdateRole(role);
+        if (memoryUtils.user.roleId === role._id) {
+            storageUtils.removeUser();
+            memoryUtils.user = {};
+            history.replace('/login');
+            message.success('role changes please relogin');
+        } else {
+            message.success('add successfully');
+            setRole(role); // update the outdate role state
+            setShowStatus(0);
+            getTableData(); // update loaded data
+        }
     };
 
     useEffect(() => {
@@ -152,7 +147,7 @@ export default function Role() {
                     setShowStatus(0);
                 }}
             >
-                <AuthForm setRole={setRole} role={role} />
+                <AuthForm setRole={setRole} role={role}/>
             </Modal>
             <Table
                 dataSource={roles}
@@ -165,7 +160,7 @@ export default function Role() {
                 columns={columns}
                 loading={isLoading}
                 bordered
-                pagination={{ defaultPageSize: PAGE_SIZE }}
+                pagination={{defaultPageSize: PAGE_SIZE}}
                 rowKey="_id"
             />
         </Card>

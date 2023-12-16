@@ -1,11 +1,11 @@
 import './login.less';
 
-import { Button, Checkbox, Form, Input, message } from 'antd';
-import { Redirect, useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {Button, Checkbox, Form, Input, message} from 'antd';
+import {Redirect, useHistory} from 'react-router-dom';
+import {useEffect, useState} from 'react';
 
 import Lottie from 'lottie-react';
-import { login } from '../../api/action';
+import {login} from '../../api/action';
 import memoryUtils from '../../utils/memoryUtils';
 import storageUtils from '../../utils/storageUtils';
 
@@ -24,20 +24,21 @@ function Login() {
     }, []);
 
     const onFinish = async (values) => {
-        const data = await login(values.username, values.password);
-        if (data.status === 0) {
-            memoryUtils.user = data.data;
-            storageUtils.saveUser(data.data);
+        try {
+            const data = await login(values.username, values.password);
+            memoryUtils.user = data;
+            storageUtils.saveUser(data);
             setUser(data.data);
             history.push('/home');
             message.success('success');
-        } else {
+
+        } catch (e) {
             message.error('Wrong password or wrong username');
         }
     };
 
     if (user && user._id) {
-        return <Redirect to={'/'} />;
+        return <Redirect to={'/'}/>;
     }
 
     return (
@@ -87,7 +88,7 @@ function Login() {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input/>
                         </Form.Item>
 
                         <Form.Item
@@ -121,7 +122,7 @@ function Login() {
                                 },
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password/>
                         </Form.Item>
 
                         <Form.Item

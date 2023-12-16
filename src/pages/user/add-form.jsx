@@ -1,22 +1,22 @@
-import { Form, Input, Select } from 'antd';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {Form, Input, Select} from 'antd';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
-const { Item } = Form;
-const { Option } = Select;
+const {Item} = Form;
+const {Option} = Select;
 
 export default function AddForm({
-    getOutput,
-    roles,
-    showStatus,
-    selectedUser,
-}) {
+                                    getOutput,
+                                    roles,
+                                    showStatus,
+                                    selectedUser,
+                                }) {
     const formRef = useRef();
     const [selectedValue, setSelectedValue] = useState(null);
 
     const getFromValues = useCallback(() => {
         return formRef.current.validateFields().then(async (values) => {
             // the form component cannot capture the value in Selector
-            values.role_id = selectedValue;
+            values.roleId = selectedValue;
             return values;
         });
     }, [selectedValue]);
@@ -52,7 +52,7 @@ export default function AddForm({
                     },
                 ]}
             >
-                <Input />
+                <Input/>
             </Item>
             <Item
                 name="password"
@@ -63,34 +63,34 @@ export default function AddForm({
                     showStatus === 2
                         ? null
                         : [
-                              {
-                                  required: true,
-                                  message: 'Please input your value!',
-                              },
-                              {
-                                  min: 6,
-                                  message: 'must be longer than 6!',
-                              },
-                              {
-                                  max: 12,
-                                  message: 'must be shorter than 12!',
-                              },
-                          ]
+                            {
+                                required: true,
+                                message: 'Please input your value!',
+                            },
+                            {
+                                min: 6,
+                                message: 'must be longer than 6!',
+                            },
+                            {
+                                max: 12,
+                                message: 'must be shorter than 12!',
+                            },
+                        ]
                 }
             >
-                <Input type="password" />
+                <Input type="password"/>
             </Item>
             <Item name="phone" label="Phone">
-                <Input />
+                <Input/>
             </Item>
             <Item name="email" label="Email">
-                <Input type="email" />
+                <Input type="email"/>
             </Item>
-            <Item name="role_id" label="Role">
+            <Item name="roleId" label="Role">
                 <Select
                     showSearch
-                    defaultValue={selectedUser.role_id}
-                    style={{ width: 200 }}
+                    defaultValue={selectedUser.roleId}
+                    style={{width: 200}}
                     onChange={setSelectedValue}
                     placeholder="Select a role"
                     optionFilterProp="children"

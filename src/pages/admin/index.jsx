@@ -1,12 +1,12 @@
 import './index.less';
 
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {Suspense, lazy} from 'react';
 
 import HeaderCom from '../../components/header';
-import { Layout } from 'antd';
+import {Layout} from 'antd';
 import LeftNav from '../../components/left-nav';
-import { Loading } from '../../components/common/Loading';
+import {Loading} from '../../components/common/Loading';
 import memoryUtils from '../../utils/memoryUtils';
 
 const Role = lazy(() => import('../role'));
@@ -18,16 +18,16 @@ const Category = lazy(() => import('../category'));
 const Bar = lazy(() => import('../chart/bar'));
 const Line = lazy(() => import('../chart/line'));
 
-const { Header, Footer, Sider, Content } = Layout;
+const {Header, Footer, Sider, Content} = Layout;
 
 const Admin = () => {
     const user = memoryUtils.user;
-    if (!user || !user._id) {
-        return <Redirect to="/login" />;
+    if (!user || !user.id) {
+        return <Redirect to="/login"/>;
     }
 
     return (
-        <Layout hasSider style={{ minHeight: '100vh' }}>
+        <Layout hasSider style={{minHeight: '100vh'}}>
             <Sider
                 width="250px"
                 style={{
@@ -39,9 +39,9 @@ const Admin = () => {
                     bottom: 0,
                 }}
             >
-                <LeftNav />
+                <LeftNav/>
             </Sider>
-            <Layout style={{ marginLeft: 250 }}>
+            <Layout style={{marginLeft: 250}}>
                 <Header
                     className="header"
                     style={{
@@ -51,10 +51,10 @@ const Admin = () => {
                         width: '100%',
                     }}
                 >
-                    <HeaderCom />
+                    <HeaderCom/>
                 </Header>
                 <Content className="content-body">
-                    <Suspense fallback={<Loading />}>
+                    <Suspense fallback={<Loading/>}>
                         <Switch>
                             <Route
                                 path="/category"
@@ -67,7 +67,7 @@ const Admin = () => {
                             <Route path="/chart/pie" component={Pie}></Route>
                             <Route path="/product" component={Product}></Route>
                             <Route path="/home" component={Home}></Route>
-                            <Redirect to="/home" />
+                            <Redirect to="/home"/>
                         </Switch>
                     </Suspense>
                 </Content>

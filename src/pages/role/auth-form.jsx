@@ -1,12 +1,12 @@
-import { Input, Tree } from 'antd';
+import {Input, Tree} from 'antd';
 
 import menuList from '../../config/menu';
 
-export default function AuthForm({ role, setRole }) {
+export default function AuthForm({role, setRole}) {
     const onCheck = (checkedKeys) => {
-        setRole({ ...role, menus: checkedKeys });
+        setRole({...role, policies: checkedKeys});
     };
-
+    
     return (
         <>
             <Input value={role.name} disabled></Input>
@@ -14,7 +14,7 @@ export default function AuthForm({ role, setRole }) {
                 checkable
                 defaultExpandAll
                 onCheck={onCheck}
-                checkedKeys={role.menus}
+                checkedKeys={role.policies}
                 treeData={menuList}
             />
         </>

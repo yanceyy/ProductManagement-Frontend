@@ -1,16 +1,16 @@
-import { Button, Card, Modal, Popconfirm, Table, message } from 'antd';
+import {Button, Card, Modal, Popconfirm, Table, message} from 'antd';
 import {
     reAddUser,
-    reDeleteUser,
+    reDeleteUser, reGetRoleList,
     reGetUserList,
     reUpdateUser,
 } from '../../api/action';
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import AddForm from './add-form';
 import LinkButton from '../../components/link-button';
-import { PAGE_SIZE } from '../../utils/constants';
-import { formateDate } from '../../utils/dateUtils';
+import {PAGE_SIZE} from '../../utils/constants';
+import {formateDate} from '../../utils/dateUtils';
 
 export default function User() {
     const [users, setUsers] = useState([]);
@@ -18,19 +18,16 @@ export default function User() {
     const [loading, setLoading] = useState(false);
     const [showStatus, setShowStatus] = useState(0);
     const [selectedUser, setSelectedUser] = useState({});
-    const outputRef = useRef(() => {});
+    const outputRef = useRef(() => {
+    });
 
     const getTableData = async () => {
         setLoading(true);
         try {
-            const response = await reGetUserList();
-            if (response.status === 0) {
-                const { users, roles } = response.data;
-                setUsers(users);
-                setRoles(roles);
-            } else {
-                message.error("couldn't connect to the server");
-            }
+            const users = await reGetUserList();
+            setUsers(users);
+            const roles = await reGetRoleList();
+            setRoles(roles);
         } finally {
             setLoading(false);
         }
@@ -41,32 +38,23 @@ export default function User() {
         const values = await outputRef?.current();
         if (values === undefined) return;
 
-        let response;
         //check is ad or update mode
-        if (showStatus === 1) response = await reAddUser(values);
-        else {
-            values._id = selectedUser._id;
-            response = await reUpdateUser(values);
-        }
-        if (response.status === 0) {
-            message.success('Successful');
-            setShowStatus(0);
-            getTableData();
+        if (showStatus === 1) {
+            await reAddUser(values);
         } else {
-            message.error('Failed');
+            values._id = selectedUser._id;
+            await reUpdateUser(values);
         }
+        message.success('Successful');
+        await getTableData();
+        setShowStatus(0);
     };
 
     const deleteUser = async (user) => {
         const _id = user._id;
-        const response = await reDeleteUser(_id);
-
-        if (response.status === 0) {
-            message.success('delete user successfully');
-            getTableData();
-        } else {
-            message.error('delete user failed');
-        }
+        await reDeleteUser(_id);
+        message.success('delete user successfully');
+        await getTableData();
     };
 
     const columns = [
@@ -84,7 +72,7 @@ export default function User() {
         },
         {
             title: 'Role id',
-            dataIndex: 'role_id',
+            dataIndex: 'roleId',
             // convert id to role name
             render: (roleId) => {
                 const id = roles.findIndex((x) => x._id === roleId);
@@ -93,7 +81,7 @@ export default function User() {
         },
         {
             title: 'Create time',
-            dataIndex: 'create_time',
+            dataIndex: 'createTime',
             render: formateDate,
         },
         {
@@ -159,7 +147,7 @@ export default function User() {
                 columns={columns}
                 loading={loading}
                 bordered
-                pagination={{ defaultPageSize: PAGE_SIZE }}
+                pagination={{defaultPageSize: PAGE_SIZE}}
                 rowKey="_id"
             />
         </Card>
