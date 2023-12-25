@@ -21,7 +21,6 @@ function ProductPage({location, history}) {
 
     useEffect(() => {
         const fetchCategoryNames = async () => {
-            console.log({pCategoryId, categoryId})
             if (pCategoryId === undefined) {
                 const categoryName = await reGetCategoryById(categoryId);
                 setCName1(categoryName.name);

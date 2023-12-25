@@ -79,7 +79,7 @@ search product
 */
 export const reSearchProducts = (pageNum, pageSize, searchName, searchType) =>
     ajax(
-        BASEURL + '/manage/product/search',
+        BASEURL + '/product/search',
         {
             pageNum,
             pageSize,
@@ -103,12 +103,11 @@ Update the status of product
  */
 export const reUpdateStatus = (productId, status) =>
     ajax(
-        BASEURL + '/manage/product/updateStatus',
+        BASEURL + `/product/${productId}`,
         {
-            productId,
             status,
         },
-        'POST',
+        'Patch',
     );
 
 /*
@@ -116,11 +115,9 @@ Delete Pictures
  */
 export const reDeletePicture = (name) =>
     ajax(
-        BASEURL + '/manage/img/delete',
-        {
-            name,
-        },
-        'POST',
+        BASEURL + `/upload/image/${name}`,
+        {},
+        'Delete',
     );
 
 /*

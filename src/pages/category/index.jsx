@@ -28,7 +28,6 @@ export default function Category() {
             setLoading(true);
             const _parentId = requireId || parentId;
             return reGetCategory(parentId).then((result) => {
-                console.log({result})
                 if (!_parentId) setCategoryNames(result);
                 else setSubCategoryNames(result);
                 setLoading(false);

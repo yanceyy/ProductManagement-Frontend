@@ -1,28 +1,27 @@
 import './index.less';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 
-import { Menu } from 'antd';
+import {Menu} from 'antd';
 import memoryUtils from '../../utils/memoryUtils';
 import menuList from '../../config/menu';
-import { useHeadTitle } from '../../context/hooks';
+import {useHeadTitle} from '../../context/hooks';
 
 export default function LeftNav() {
     const location = useLocation();
     const history = useHistory();
-    const { setHeadTitle } = useHeadTitle();
+    const {setHeadTitle} = useHeadTitle();
 
     const [openKey, setOpenKey] = useState([]);
 
     const hasAuth = (item) => {
-        const { key, isPublic } = item;
-        const menus = memoryUtils.user.role.menus;
-        const username = memoryUtils.user.username;
-        if (username === 'admin' || isPublic || menus.indexOf(key) !== -1) {
+        const {key, isPublic} = item;
+        const {role, username} = memoryUtils.user
+        if (username === 'admin' || isPublic || role.indexOf(key) !== -1) {
             return true;
         } else if (item.children) {
-            return item.children.some((x) => menus.indexOf(x.key) !== -1);
+            return item.children.some((x) => role.indexOf(x.key) !== -1);
         }
         return false;
     };
@@ -73,6 +72,7 @@ export default function LeftNav() {
                 }
             }
         }
+
         const selectedMenu = findOpenedMenu(menuList, location.pathname);
         setHeadTitle(selectedMenu?.title ?? '');
     }, [setHeadTitle, location.pathname]);

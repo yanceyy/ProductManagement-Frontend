@@ -47,8 +47,8 @@ export default function AddForm({
                         message: 'must be longer than 1!',
                     },
                     {
-                        max: 12,
-                        message: 'must be shorter than 12!',
+                        max: 20,
+                        message: 'must be shorter than 20!',
                     },
                 ]}
             >
@@ -68,11 +68,11 @@ export default function AddForm({
                                 message: 'Please input your value!',
                             },
                             {
-                                min: 6,
+                                min: 4,
                                 message: 'must be longer than 6!',
                             },
                             {
-                                max: 12,
+                                max: 20,
                                 message: 'must be shorter than 12!',
                             },
                         ]
@@ -80,13 +80,13 @@ export default function AddForm({
             >
                 <Input type="password"/>
             </Item>
-            <Item name="phone" label="Phone">
+            <Item name="phone" label="Phone" required>
                 <Input/>
             </Item>
-            <Item name="email" label="Email">
+            <Item name="email" label="Email" required>
                 <Input type="email"/>
             </Item>
-            <Item name="roleId" label="Role">
+            <Item name="roleId" label="Role" required>
                 <Select
                     showSearch
                     defaultValue={selectedUser.roleId}

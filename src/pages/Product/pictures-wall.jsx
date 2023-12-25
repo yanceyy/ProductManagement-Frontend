@@ -61,7 +61,7 @@ export default function PicturesWall({imgs, bindPictures}) {
             file.url = BASEURL + '/files/' + filename;
         } else if (file.status === 'removed') {
             const result = await reDeletePicture(file.name);
-            if (result.status === 0) {
+            if (result.deletedCount !== 0) {
                 message.success('delete successfully');
             } else {
                 message.error('delete failed');

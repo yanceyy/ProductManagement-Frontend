@@ -12,14 +12,7 @@ export default function ProductHome() {
     const [total, setTotal] = useState(0);
     const [searchName, setSearchName] = useState(''); // keywords for search
     const [searchType, setSearchType] = useState('productName');
-    const [products, setProducts] = useState([
-        {
-            name: '',
-            description: '',
-            price: 50,
-            status: 0,
-        },
-    ]);
+    const [products, setProducts] = useState([]);
     const [pageNum, setPageNum] = useState(1);
     const history = useHistory();
 
@@ -29,29 +22,24 @@ export default function ProductHome() {
         if (searchName) {
             reSearchProducts(pageNum, PAGE_SIZE, searchName, searchType).then(
                 (result) => {
-                    if (result.status === 0) {
-                        const {list, total} = result.data;
-                        setProducts(list);
-                        setTotal(total);
-                    }
+                    const {list, total} = result;
+                    setProducts(list);
+                    setTotal(total);
                 },
             );
         } else {
             reGetList(pageNum, PAGE_SIZE).then((result) => {
-                setProducts(result);
-                setTotal(1);
+                const {list, total} = result;
+                setProducts(list);
+                setTotal(total);
             });
         }
         setLoading(false);
     };
 
     const updateStatus = async (id, status) => {
-        const result = await reUpdateStatus(id, status);
-        if (result.status === 0) {
-            message.success('Update successfully');
-        } else {
-            message.error('Update failed');
-        }
+        await reUpdateStatus(id, status);
+        message.success('Update successfully');
         getColumnData(pageNum);
     };
 
